@@ -1,0 +1,557 @@
+<!-- Cakra Console V2.5 - Frontend Standalone Blogspot -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ck-blue-brand: #1d4ed8;
+    --ck-pink-brand: #f000d6;
+    --ck-pink-hover: #bd02aa;
+    --ck-pink-light: #fdf2f8;
+    --sf-bg: #fdf2f8;
+    --sf-border: #e9d5ff;
+    --sf-text-dark: #1f2937;
+    --sf-text-muted: #6b7280;
+    --sf-shadow-pro: 0 10px 20px rgba(189, 2, 170, 0.05), 0 3px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  body, .cakra-body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #fdf2f8 0%, #e0f2fe 100%);
+    margin: 0; padding: 0;
+    color: var(--sf-text-dark);
+    min-height: 100vh;
+  }
+
+  .top-navbar {
+    background: #ffffff;
+    color: var(--sf-text-dark); padding: 12px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+    border-bottom: 2px solid var(--sf-border);
+  }
+  .navbar-brand { font-family: 'Public Sans', sans-serif; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--ck-blue-brand); }
+  .navbar-brand i { color: var(--ck-pink-brand); }
+  
+  .navbar-menu { display: flex; gap: 15px; }
+  .nav-btn { background: transparent; border: 1px solid transparent; color: var(--sf-text-muted); padding: 8px 18px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;}
+  .nav-btn:hover { background: #fee2e2; color: var(--ck-pink-hover); }
+  .nav-btn.active { background: var(--ck-pink-brand); color: #fff; box-shadow: 0 4px 8px rgba(240, 0, 214, 0.2); }
+
+  .app-container { padding: 40px; }
+  .page-view { display: none; animation: fadeIn 0.4s ease; }
+  .page-view.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .welcome-section { margin-bottom: 30px; text-align: center; }
+  .welcome-section h1 { font-family: 'Public Sans', sans-serif; font-size: 2.2rem; color: var(--ck-blue-brand); margin: 0 0 5px 0; font-weight: 800;}
+  .welcome-section p { color: var(--sf-text-muted); margin: 0; font-size: 1.1rem; }
+
+  .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+  .dash-card {
+    background: #fff; border-radius: 20px; padding: 35px 25px;
+    box-shadow: var(--sf-shadow-pro); text-align: center; cursor: pointer;
+    transition: all 0.3s ease; border: 2px solid transparent; position: relative; overflow: hidden;
+  }
+  .dash-card:hover { transform: translateY(-5px); border-color: #fbcfe8; box-shadow: 0 15px 30px rgba(189, 2, 170, 0.1); }
+  .dash-icon { width: 75px; height: 75px; border-radius: 20px; background: #fae8ff; color: var(--ck-pink-brand); font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px auto; transition: 0.3s; }
+  .dash-card:hover .dash-icon { background: var(--ck-blue-brand); color: #fff; transform: rotate(-5deg); }
+  .dash-title { font-size: 1.25rem; font-weight: 700; color: var(--sf-text-dark); margin-bottom: 12px; font-family: 'Public Sans', sans-serif; }
+  
+  .slds-brand-header { background: #ffffff; padding: 25px 40px; border-radius: 16px; border-left: 8px solid var(--ck-pink-brand); margin-bottom: 35px; box-shadow: var(--sf-shadow-pro); display: flex; align-items: center; gap: 25px; border: 1px solid var(--sf-border); border-left: 8px solid var(--ck-pink-brand); }
+  .icon-container { background: linear-gradient(135deg, var(--ck-pink-brand) 0%, var(--ck-blue-brand) 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; flex-shrink: 0; box-shadow: 0 5px 10px rgba(189, 2, 170, 0.2); }
+  .slds-brand-header h1 { margin: 0; font-size: 1.7rem; color: var(--ck-blue-brand); font-weight: 800; font-family: 'Public Sans', sans-serif;}
+  
+  .slds-card { background: #ffffff; border: 1px solid var(--sf-border); border-radius: 16px; padding: 35px; margin-bottom: 30px; box-shadow: var(--sf-shadow-pro); }
+  .slds-card__title { font-family: 'Public Sans', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 30px; color: var(--ck-pink-brand); display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #fae8ff; padding-bottom: 15px; }
+  
+  .slds-grid { display: flex; flex-wrap: wrap; gap: 25px; }
+  .slds-form-element { flex: 1; min-width: 280px; }
+  .slds-form-element__label { display: block; font-size: 0.8rem; color: var(--sf-text-muted); margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  
+  .slds-input, .slds-select { width: 100%; padding: 14px 18px; border: 2px solid #f0f0f0; border-radius: 10px; background-color: #fdfdfd; font-size: 0.95rem; box-sizing: border-box; transition: 0.3s; color: var(--sf-text-dark); }
+  .slds-input:focus, .slds-select:focus { border-color: var(--ck-pink-brand); background-color: #fff; outline: 0; box-shadow: 0 0 0 4px rgba(240, 0, 214, 0.1); }
+  
+  table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; border: 1px solid var(--sf-border); overflow: hidden; margin-top: 20px; }
+  th { background: #fff1f2; color: var(--ck-pink-hover); font-size: 0.8rem; font-weight: 700; padding: 18px; border-bottom: 2px solid var(--sf-border); text-align: left; text-transform: uppercase; letter-spacing: 1px; }
+  td { padding: 18px; border-bottom: 1px solid #fdf2f8; background: #fff; }
+
+  .slds-button { background: linear-gradient(135deg, var(--ck-blue-brand) 0%, var(--ck-pink-brand) 100%); color: #fff; border: none; padding: 16px 30px; font-size: 1rem; border-radius: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 6px 12px rgba(189, 2, 170, 0.2); transition: 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .slds-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(189, 2, 170, 0.3); filter: brightness(1.1); }
+  .slds-button:disabled { background: #d1d5db; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+  .slds-button--neutral { background: #fff; color: var(--ck-pink-brand); border: 2px solid var(--ck-pink-brand); width: auto; box-shadow: none; margin-top: 10px; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;}
+
+  /* Area Kamera Absen */
+  .camera-box { width: 100%; max-width: 320px; height: 240px; background: #1e293b; border-radius: 12px; margin: 15px auto; overflow: hidden; border: 3px solid var(--sf-border); position: relative; }
+  video, canvas { width: 100%; height: 100%; object-fit: cover; }
+</style>
+
+<div class="cakra-body">
+  <nav class="top-navbar">
+    <div class="navbar-brand" onclick="navigateTo('home')"><i class="fa-solid fa-bolt"></i> PT. CAKRA INOVASI KREASINDO</div>
+    <div class="navbar-menu">
+      <button class="nav-btn active" id="nav-home" onclick="navigateTo('home')"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="nav-btn" id="nav-po" onclick="navigateTo('po')"><i class="fa-solid fa-file-invoice"></i> Create PO</button>
+      <button class="nav-btn" id="nav-inv" onclick="navigateTo('inv')"><i class="fa-solid fa-file-invoice-dollar"></i> Create INV</button>
+      <button class="nav-btn" id="nav-master" onclick="navigateTo('master')"><i class="fa-solid fa-database"></i> Master Data</button>
+      <button class="nav-btn" id="nav-absen" onclick="navigateTo('absen')"><i class="fa-solid fa-camera"></i> Absen Foto</button>
+    </div>
+  </nav>
+
+  <datalist id="customerList"></datalist>
+
+  <div class="app-container">
+    
+    <!-- PAGE HOME -->
+    <div id="page-home" class="page-view active">
+      <div class="welcome-section">
+        <h1>Welcome, PT. Cakra!</h1>
+        <p>System Blogspot Frontend is operational. Choose a task:</p>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dash-card" onclick="navigateTo('po')"><div class="dash-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div class="dash-title">Purchase Order (PO)</div></div>
+        <div class="dash-card" onclick="navigateTo('inv')"><div class="dash-icon" style="background:#fdf2f8; color:#f000d6;"><i class="fa-solid fa-file-signature"></i></div><div class="dash-title">Create Invoice (INV)</div></div>
+        <div class="dash-card" onclick="navigateTo('master')"><div class="dash-icon" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-users-gear"></i></div><div class="dash-title">Kelola Master Data</div></div>
+        <div class="dash-card" onclick="navigateTo('absen')"><div class="dash-icon" style="background:#e0e7ff; color:#1d4ed8;"><i class="fa-solid fa-camera"></i></div><div class="dash-title">Absen Foto Wajah</div></div>
+      </div>
+    </div>
+
+    <!-- PAGE PO -->
+    <div id="page-po" class="page-view">
+      <div class="slds-brand-header"><div class="icon-container"><i class="fa-solid fa-file-invoice"></i></div><div><h1>Create Purchase Order</h1><p>Formulir Pembuatan PO & Ekspor PDF Otomatis</p></div></div>
+      <form id="poForm" onsubmit="handleFormSubmit(event)">
+        <div class="slds-card">
+          <div class="slds-card__title"><i class="fa-solid fa-circle-info"></i> Informasi Dasar</div>
+          <div class="slds-grid">
+            <div class="slds-form-element"><label class="slds-form-element__label">PO Number (Internal)</label><input type="text" id="poNumber" class="slds-input" required><small id="poSuggestionHelp" style="display:block; margin-top:6px; color: var(--ck-blue-brand); font-size:0.75rem; font-weight:600;"></small></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">PO Date</label><input type="date" id="poDate" class="slds-input" required></div>
+            <div class="slds-form-element">
+              <label class="slds-form-element__label">Pilih Customer</label>
+              <select id="customerSelect" class="slds-select" onchange="handleCustomerChange()" required><option value="">-- Pilih Customer --</option></select>
+              <div id="customerBaruInputContainer" style="display:none; margin-top:10px;">
+                <label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Nama Customer/PT Baru (Free Text)</label>
+                <input type="text" id="customerBaruNama" class="slds-input" placeholder="Ketik Nama PT / Customer Baru...">
+              </div>
+            </div>
+          </div>
+          <div class="slds-grid" style="margin-top: 20px; align-items: center;">
+            <div class="slds-form-element"><label class="slds-form-element__label">Nomor PO dari Customer</label><input type="text" id="customerPONumber" class="slds-input" placeholder="e.g. 025/ARK-PO/VI/2026"></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">Upload Berkas PO Customer</label><input type="file" id="customerFile" class="slds-input" accept=".pdf,image/*"></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">Prepared By (Staff)</label><select id="poPreparedBy" class="slds-select" required><option value="Shiva">Shiva</option><option value="Maharani">Maharani</option></select></div>
+            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 25px;"><input type="checkbox" id="includePPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="includePPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
+          </div>
+        </div>
+        <div class="slds-grid" style="align-items: stretch;">
+          <div class="slds-card" style="flex:1;"><div class="slds-card__title">Data Vendor</div><div class="slds-form-element"><label class="slds-form-element__label">Pilih Vendor</label><select id="vendorSelect" class="slds-select" onchange="autoFillVendor()" required></select></div><div class="slds-grid" style="margin-top:15px;"><div class="slds-form-element"><label class="slds-form-element__label">PIC</label><input type="text" id="v_pic" class="slds-input" readonly></div><div class="slds-form-element"><label class="slds-form-element__label">Phone</label><input type="text" id="v_phone" class="slds-input" readonly></div></div><div class="slds-form-element" style="margin-top:15px;"><label class="slds-form-element__label">Alamat Vendor</label><textarea id="v_addr" class="slds-input" readonly></textarea></div></div>
+          <div class="slds-card" style="flex:1;"><div class="slds-card__title">Ship To (Lokasi Kirim)</div><div class="slds-form-element" id="projectSelectContainer" style="display:none;"><label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Pilih Project ARA</label><select id="projectSelect" class="slds-select" onchange="autoFillShipTo()"></select></div><div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Nama Project</label><input type="text" id="s_project_name" class="slds-input" required></div><div class="slds-grid" style="margin-top:10px;">
+              <div class="slds-form-element"><label class="slds-form-element__label">Penerima</label><input type="text" id="s_receiver" class="slds-input" required></div>
+              <div class="slds-form-element"><label class="slds-form-element__label">Phone</label><input type="text" id="s_phone" class="slds-input" required></div>
+            </div><div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Kirim</label><textarea id="s_addr" class="slds-input" required></textarea></div></div>
+        </div>
+        <div class="slds-card"><div class="slds-card__title">Item List (Material)</div><table id="itemTable"><thead><tr><th>Deskripsi</th><th style="width:120px;">Size</th><th style="width:120px;">Qty</th><th style="width:220px;">Harga Satuan</th><th style="width:50px;"></th></tr></thead><tbody id="itemBody"></tbody></table><button type="button" class="slds-button--neutral" onclick="addItemRow()">+ Tambah Item</button></div>
+        <div style="text-align:center; padding: 20px 0 60px 0;"><button type="submit" id="submitBtn" class="slds-button"><i class="fa-solid fa-file-pdf"></i> BUAT PO & GENERATE PDF</button></div>
+      </form>
+    </div>
+
+    <!-- PAGE ABSEN (KAMERA AKTIF) -->
+    <div id="page-absen" class="page-view">
+      <div class="slds-brand-header">
+        <div class="icon-container" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fa-solid fa-camera"></i></div>
+        <div><h1 style="color: #1d4ed8;">Absensi Foto Wajah</h1><p>Pilih nama Anda, pastikan wajah terlihat di kamera harian</p></div>
+      </div>
+      <div class="slds-card" style="max-width: 500px; margin: 0 auto; text-align:center;">
+        <div class="slds-form-element" style="text-align:left;">
+          <label class="slds-form-element__label">Pilih Nama</label>
+          <select id="absenNama" class="slds-select"><option value="">-- Memuat Nama... --</option></select>
+        </div>
+        
+        <div class="camera-box">
+          <video id="webcam" autoplay playsinline></video>
+          <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        
+        <button type="button" class="slds-button" onclick="submitAbsenDenganFoto()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <i class="fa-solid fa-camera-retro"></i> Ambil Foto & Kirim Absen
+        </button>
+        <p id="pesanStatus" style="font-weight: 700; margin-top: 20px; font-size: 1.1rem;"></p>
+      </div>
+    </div>
+
+    <!-- PAGE INV -->
+    <div id="page-inv" class="page-view">
+      <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%);"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1 style="color: #bd02aa;">Create Invoice</h1><p>Formulir Penagihan & Ekspor PDF Otomatis</p></div></div>
+      <form id="invForm" onsubmit="handleInvSubmit(event)">
+        <div class="slds-card">
+          <div class="slds-card__title"><i class="fa-solid fa-circle-info"></i> Informasi Dasar Invoice</div>
+          <div class="slds-grid">
+            <div class="slds-form-element"><label class="slds-form-element__label">Invoice Number</label><input type="text" id="invNumber" class="slds-input" required><small id="invSuggestionHelp" style="display:block; margin-top:6px; color: #f000d6; font-size:0.75rem; font-weight:600;"></small></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">Invoice Date</label><input type="date" id="invDate" class="slds-input" required></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">Project Name</label><input type="text" id="invProject" class="slds-input" required placeholder="Murni nama project"></div>
+            <div class="slds-form-element"><label class="slds-form-element__label">No. PO Ref (Customer)</label><input type="text" id="invPoRef" class="slds-input" placeholder="Free Text"></div>
+          </div>
+          <div class="slds-grid" style="margin-top: 20px; align-items: center;">
+            <div class="slds-form-element" style="flex: 2;"><label class="slds-form-element__label">Nama Customer</label><input type="text" id="invCustomerName" class="slds-input" list="customerList" oninput="checkAraInv()" placeholder="Ketik nama atau pilih..." required></div>
+            <div class="slds-form-element" style="flex: 1;"><label class="slds-form-element__label">Upload Berkas PO (Optional)</label><input type="file" id="invCustomerFile" class="slds-input" accept=".pdf,image/*"></div>
+            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 25px;"><input type="checkbox" id="invPPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="invPPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
+          </div>
+        </div>
+        <div class="slds-grid" style="align-items: stretch;">
+          <div class="slds-card" style="flex:1;">
+            <div class="slds-card__title"><i class="fa-solid fa-building-user"></i> Customer Details (Bill To)</div>
+            <div class="slds-form-element"><label class="slds-form-element__label">Contact Name (UP)</label><input type="text" id="inv_c_contact" class="slds-input" required></div>
+            <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Phone</label><input type="text" id="inv_c_phone" class="slds-input" required></div>
+            <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Penagihan</label><textarea id="inv_c_addr" class="slds-input" style="height:65px;" required></textarea></div>
+          </div>
+          <div class="slds-card" style="flex:1;">
+            <div class="slds-card__title"><i class="fa-solid fa-truck-fast"></i> Ship To (Data Lapangan)</div>
+            <div class="slds-form-element" id="invProjSelectContainer" style="display:none;"><label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Pilih Project ARA</label><select id="invProjectSelect" class="slds-select" onchange="autoFillInvShipTo()"></select></div>
+            <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Nama Perusahaan Lapangan</label><input type="text" id="inv_s_name" class="slds-input" required></div>
+            <div class="slds-grid" style="margin-top:10px;">
+              <div class="slds-form-element"><label class="slds-form-element__label">Penerima Lapangan</label><input type="text" id="inv_s_receiver" class="slds-input" required></div>
+              <div class="slds-form-element"><label class="slds-form-element__label">Phone</label><input type="text" id="inv_s_phone" class="slds-input" required></div>
+            </div>
+            <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Lapangan</label><textarea id="inv_s_addr" class="slds-input" style="height:65px;" required></textarea></div>
+          </div>
+        </div>
+        <div class="slds-card">
+          <div class="slds-card__title"><i class="fa-solid fa-list-ol"></i> Item List (Free Text)</div>
+          <table id="invTable"><thead><tr><th>Deskripsi Tagihan / Pekerjaan</th><th style="width:120px;">Qty</th><th style="width:250px;">Unit Price (Rp)</th><th style="width:50px;"></th></tr></thead><tbody id="invBody"></tbody></table>
+          <button type="button" class="slds-button--neutral" onclick="addInvRow()"><i class="fa-solid fa-circle-plus"></i> Tambah Item Tagihan</button>
+        </div>
+        <div style="text-align:center; padding: 20px 0 60px 0;"><button type="submit" id="invSubmitBtn" class="slds-button" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%); max-width:400px;"><i class="fa-solid fa-file-pdf"></i> BUAT INV & GENERATE PDF</button></div>
+      </form>
+    </div>
+
+    <!-- PAGE MASTER -->
+    <div id="page-master" class="page-view">
+      <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fa-solid fa-database"></i></div><div><h1>Master Data Management</h1><p>Tambah data Customer, Vendor, Material, dan Karyawan baru ke Database</p></div></div>
+      <div class="slds-grid">
+        <div class="slds-card" style="flex:1; min-width: 250px;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-plus"></i> Input Vendor Baru</div>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Vendor / PT</label><input type="text" id="new_v_name" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama PIC</label><input type="text" id="new_v_pic" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">No HP PIC</label><input type="text" id="new_v_phone" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Alamat Lengkap</label><textarea id="new_v_addr" class="slds-input" style="height:60px;"></textarea></div><br>
+          <button type="button" class="slds-button" onclick="submitVendor()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Vendor</button>
+        </div>
+        <div class="slds-card" style="flex:1; min-width: 250px;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-building-circle-check"></i> Input Customer Baru</div>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Customer Induk</label><input type="text" id="new_c_name" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Project</label><input type="text" id="new_c_project" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Kontraktor</label><input type="text" id="new_c_contractor" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Penerima Lapangan</label><input type="text" id="new_c_receiver" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">No HP Lapangan</label><input type="text" id="new_c_phone" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Alamat Pengiriman</label><textarea id="new_c_addr" class="slds-input" style="height:60px;"></textarea></div><br>
+          <button type="button" class="slds-button" onclick="submitCustomer()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Customer</button>
+        </div>
+        <div class="slds-card" style="flex:1; min-width: 250px;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-box-open"></i> Input Item Baru</div>
+          <div class="slds-form-element"><label class="slds-form-element__label">Kategori</label><input type="text" id="new_i_cat" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Deskripsi Item</label><input type="text" id="new_i_desc" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Size / Satuan</label><input type="text" id="new_i_size" class="slds-input"></div><br>
+          <div class="slds-form-element"><label class="slds-form-element__label">Harga Satuan (Rp)</label><input type="number" id="new_i_cost" class="slds-input"></div><br>
+          <button type="button" class="slds-button" onclick="submitItem()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Item</button>
+        </div>
+        <div class="slds-card" style="flex:1; min-width: 250px;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-gear"></i> Input Karyawan Baru</div>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Lengkap Karyawan</label><input type="text" id="new_k_nama" class="slds-input"></div><br><br><br><br><br>
+          <button type="button" class="slds-button" onclick="submitKaryawan()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Karyawan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ==========================================
+  // PENTING: TEMPELKAN URL WEB APP EXEC ANDA DI SINI
+  // ==========================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM/exec";
+
+  let vendorMaster = []; let customerMaster = []; let itemMaster = []; let karyawanMaster = [];
+  let videoStream = null;
+
+  // Navigasi halaman & Kontrol Kamera Otomatis
+  window.navigateTo = function(pageId) {
+    document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    const target = document.getElementById('page-' + pageId);
+    if(target) target.classList.add('active');
+    const btn = document.getElementById('nav-' + pageId);
+    if(btn) btn.classList.add('active');
+
+    // Jika masuk ke halaman absen, aktifkan kamera komputer secara langsung
+    if (pageId === 'absen') {
+      bukaKameraKomputer();
+    } else {
+      matikanKameraKomputer();
+    }
+  }
+
+  // ==========================================
+  // CORE FETCH ENGINE (Menembak Data ke Apps Script)
+  // ==========================================
+  async function callBackend(action, dataPayload) {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: action, data: dataPayload })
+    });
+    const json = await response.json();
+    if (json.status === "error") throw new Error(json.message);
+    return json.message;
+  }
+
+  window.onload = function() {
+    document.getElementById('poDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
+    
+    // Tarik data Suggestion & Database via GET
+    fetch(API_URL + "?action=getPONumberSuggestion").then(r => r.text()).then(s => {
+      document.getElementById('poNumber').value = s;
+      document.getElementById('poSuggestionHelp').innerHTML = 'Saran No. PO Aktif';
+    });
+    fetch(API_URL + "?action=getINVNumberSuggestion").then(r => r.text()).then(s => {
+      document.getElementById('invNumber').value = s;
+      document.getElementById('invSuggestionHelp').innerHTML = 'Saran No. INV Aktif';
+    });
+
+    fetch(API_URL + "?action=getVendorMaster").then(r => r.json()).then(d => { vendorMaster = d; populateVendor(); });
+    fetch(API_URL + "?action=getCustomerMaster").then(r => r.json()).then(d => { customerMaster = d; populateCustomerOptions(); });
+    fetch(API_URL + "?action=getItemMaster").then(r => r.json()).then(d => { itemMaster = d; addItemRow(); addInvRow(); });
+    
+    loadKaryawanDropdown();
+  };
+
+  // ==========================================
+  // FITUR ABSEN KAMERA REAL TIME
+  // ==========================================
+  function loadKaryawanDropdown() {
+    fetch(API_URL + "?action=getKaryawanMaster").then(r => r.json()).then(data => {
+      karyawanMaster = data;
+      const sel = document.getElementById('absenNama');
+      sel.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
+      karyawanMaster.forEach(k => { if(k.nama) sel.add(new Option(k.nama, k.nama)); });
+    });
+  }
+
+  async function bukaKameraKomputer() {
+    const video = document.getElementById('webcam');
+    try {
+      videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } });
+      video.srcObject = videoStream;
+    } catch (err) {
+      document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera. Harap beri izin browser.";
+      document.getElementById('pesanStatus').style.color = "red";
+    }
+  }
+
+  function matikanKameraKomputer() {
+    if (videoStream) {
+      videoStream.getTracks().forEach(track => track.stop());
+      videoStream = null;
+    }
+  }
+
+  async function submitAbsenDenganFoto() {
+    const nama = document.getElementById('absenNama').value;
+    if (!nama) return alert("Pilih nama Anda!");
+
+    const pesan = document.getElementById('pesanStatus');
+    pesan.innerHTML = "Sedang mengambil foto & mencatat absen...";
+    pesan.style.color = "blue";
+
+    // Gambar frame video ke Canvas untuk mengambil screenshot wajah
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 320;
+    canvas.height = 240;
+    context.drawImage(video, 0, 0, 320, 240);
+    
+    // Ubah gambar menjadi text string base64 png
+    const rawImageBase64 = canvas.toDataURL('image/png').split(',')[1];
+
+    try {
+      const msg = await callBackend("simpanAbsenFoto", { nama: nama, fotoBase64: rawImageBase64 });
+      alert(msg);
+      pesan.innerHTML = msg; pesan.style.color = "green";
+      document.getElementById('absenNama').value = "";
+      setTimeout(() => { navigateTo('home'); pesan.innerHTML = ""; }, 1500);
+    } catch (e) {
+      alert("Gagal: " + e.message);
+      pesan.innerHTML = "Gagal kirim absen."; pesan.style.color = "red";
+    }
+  }
+
+  // ==========================================
+  // FITUR LOGIKA PO & INVOICE (FREE TEXT INCLUDED)
+  // ==========================================
+  function populateVendor() {
+    const sel = document.getElementById('vendorSelect'); sel.innerHTML = '<option value="">-- Pilih Vendor --</option>';
+    vendorMaster.forEach(v => { if(v.name) sel.add(new Option(v.name + " (PIC: " + v.pic + ")", v.name + " | " + v.pic)); });
+  }
+
+  function populateCustomerOptions() {
+    const sel = document.getElementById('customerSelect'); sel.innerHTML = '<option value="">-- Pilih Customer --</option>';
+    const list = document.getElementById('customerList'); list.innerHTML = '';
+    const uniqueCustomers = [...new Set(customerMaster.map(c => c.customer))];
+    uniqueCustomers.forEach(cust => { if(cust) { sel.add(new Option(cust, cust)); const opt = document.createElement('option'); opt.value = cust; list.appendChild(opt); } });
+    sel.add(new Option("[ CUSTOMER BARU / REGULER ]", "Customer Baru"));
+  }
+
+  function handleCustomerChange() {
+    const custVal = document.getElementById('customerSelect').value;
+    const projContainer = document.getElementById('projectSelectContainer');
+    const projSelect = document.getElementById('projectSelect');
+    const customerBaruContainer = document.getElementById('customerBaruInputContainer');
+    const customerBaruInput = document.getElementById('customerBaruNama');
+    
+    document.getElementById('s_project_name').value = ""; document.getElementById('s_receiver').value = "";
+    document.getElementById('s_phone').value = ""; document.getElementById('s_addr').value = "";
+
+    if (custVal === "Customer Baru") {
+      customerBaruContainer.style.display = "block"; customerBaruInput.required = true;
+      projContainer.style.display = "none"; projSelect.required = false;
+      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
+    } else if (custVal === "PT. Anugerah Rejeki Asia (ARA)") {
+      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; customerBaruInput.value = "";
+      projContainer.style.display = "block"; projSelect.required = true;
+      projSelect.innerHTML = '<option value="">-- Pilih Project ARA --</option>';
+      const araProjects = customerMaster.filter(x => x.customer === custVal);
+      araProjects.forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
+      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = true);
+    } else {
+      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; customerBaruInput.value = "";
+      projContainer.style.display = "none"; projSelect.required = false;
+      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
+    }
+  }
+
+  function autoFillShipTo() {
+    const projVal = document.getElementById('projectSelect').value;
+    const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
+    if(match) { document.getElementById('s_project_name').value = match.project; document.getElementById('s_receiver').value = match.receiver; document.getElementById('s_phone').value = match.phone; document.getElementById('s_addr').value = match.address; }
+  }
+
+  function autoFillVendor() {
+    const val = document.getElementById('vendorSelect').value;
+    const v = vendorMaster.find(x => (x.name + " | " + x.pic) === val);
+    if(v) { document.getElementById('v_pic').value = v.pic; document.getElementById('v_phone').value = v.phone; document.getElementById('v_addr').value = v.address; }
+  }
+
+  function addItemRow() {
+    const tbody = document.getElementById('itemBody'); if (tbody.rows.length >= 10) return;
+    const row = tbody.insertRow();
+    let sel = document.createElement('select'); sel.className = 'slds-select'; sel.innerHTML = '<option value="">-- Pilih Item --</option>';
+    itemMaster.forEach(i => sel.add(new Option(i.desc, i.desc))); row.insertCell(0).appendChild(sel);
+    row.insertCell(1).innerHTML = '<input type="text" class="slds-input" readonly placeholder="-">';
+    row.insertCell(2).innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
+    row.insertCell(3).innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
+    sel.onchange = function() { const itm = itemMaster.find(x => x.desc === this.value); if(itm) { row.cells[1].querySelector('input').value = itm.size; row.cells[3].querySelector('input').value = itm.cost; } };
+    row.insertCell(4).innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault(); const btn = document.getElementById('submitBtn'); const file = document.getElementById('customerFile').files[0]; 
+    btn.disabled = true; btn.innerHTML = 'Processing...';
+    
+    const custVal = document.getElementById('customerSelect').value;
+    const manualCustName = document.getElementById('customerBaruNama').value;
+    let finalCustomerName = (custVal === "Customer Baru") ? manualCustName : custVal;
+
+    let contractorVal = finalCustomerName; 
+    if (custVal === "PT. Anugerah Rejeki Asia (ARA)") {
+      const projVal = document.getElementById('projectSelect').value;
+      const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
+      if(match) contractorVal = match.contractor; 
+    }
+
+    const vendorSelVal = document.getElementById('vendorSelect').value;
+    const vMatch = vendorMaster.find(x => (x.name + " | " + x.pic) === vendorSelVal);
+    const finalVendorName = vMatch ? vMatch.name : vendorSelVal;
+
+    const formData = {
+      poNumber: document.getElementById('poNumber').value, poDate: document.getElementById('poDate').value,
+      customerName: finalCustomerName, contractorName: contractorVal, projectName: document.getElementById('s_project_name').value,
+      vendorName: finalVendorName, vendorPIC: document.getElementById('v_pic').value,
+      vendorAddress: document.getElementById('v_addr').value, vendorPhone: document.getElementById('v_phone').value,
+      receiverName: document.getElementById('s_receiver').value, shipAddress: document.getElementById('s_addr').value,
+      shipPhone: document.getElementById('s_phone').value, customerPONumber: document.getElementById('customerPONumber').value,
+      includePPN: document.getElementById('includePPN').checked ? 0.11 : 0, preparedBy: document.getElementById('poPreparedBy').value, 
+      items: [], customerFile: null 
+    };
+
+    const rows = document.getElementById('itemBody').rows;
+    for(let r of rows) { const dVal = r.cells[0].querySelector('select').value; if(dVal) { formData.items.push({ desc: dVal, size: r.cells[1].querySelector('input').value, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value }); } }
+    
+    const run = async () => {
+      try {
+        const msg = await callBackend("processPO", formData);
+        alert(msg); document.getElementById('poForm').reset(); document.getElementById('itemBody').innerHTML = ''; addItemRow();
+        btn.disabled = false; btn.innerHTML = 'BUAT PO & GENERATE PDF'; navigateTo('home'); window.scrollTo(0,0);
+      } catch(err) { alert(err.message); btn.disabled = false; }
+    };
+
+    if (file) { const reader = new FileReader(); reader.onload = function(ex) { formData.customerFile = { data: ex.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
+  }
+
+  // LOGIKA INVOICE
+  function checkAraInv() {
+    const custVal = document.getElementById('invCustomerName').value;
+    const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("(ARA)");
+    const projContainer = document.getElementById('invProjSelectContainer'); const projSelect = document.getElementById('invProjectSelect');
+    if (isARA) {
+      document.getElementById('inv_c_contact').value = "Ibu Vivie"; document.getElementById('inv_c_phone').value = "0817-650-4844"; document.getElementById('inv_c_addr').value = "Rukan Artha Gading Blok G-17 Kelapa Gading Jakarta Utara";
+      projContainer.style.display = "block"; projSelect.innerHTML = '<option value="">-- Pilih Project Lapangan ARA --</option>';
+      customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
+    } else { projContainer.style.display = "none"; }
+  }
+
+  function autoFillInvShipTo() {
+    const projVal = document.getElementById('invProjectSelect').value;
+    const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
+    if(match) { document.getElementById('invProject').value = match.project; document.getElementById('inv_s_name').value = match.contractor; document.getElementById('inv_s_receiver').value = match.receiver; document.getElementById('inv_s_phone').value = match.phone; document.getElementById('inv_s_addr').value = match.address; }
+  }
+
+  function addInvRow() {
+    const tb = document.getElementById('invBody'); if (tb.rows.length >= 10) return;
+    const r = tb.insertRow(); r.innerHTML = `<td><input type="text" class="slds-input"></td><td><input type="number" class="slds-input" value="1"></td><td><input type="number" class="slds-input"></td><td><i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest('tr').remove()"></i></td>`;
+  }
+
+  async function handleInvSubmit(e) {
+    e.preventDefault(); const btn = document.getElementById('invSubmitBtn'); const file = document.getElementById('invCustomerFile').files[0];
+    btn.disabled = true; btn.innerHTML = 'Processing...';
+    const formData = {
+      invNumber: document.getElementById('invNumber').value, invDate: document.getElementById('invDate').value, projectName: document.getElementById('invProject').value, poRef: document.getElementById('invPoRef').value,
+      customerName: document.getElementById('invCustomerName').value, custContact: document.getElementById('inv_c_contact').value, custPhone: document.getElementById('inv_c_phone').value, custAddress: document.getElementById('inv_c_addr').value, includePPN: document.getElementById('invPPN').checked ? 0.11 : 0,
+      shipName: document.getElementById('inv_s_name').value, shipReceiver: document.getElementById('inv_s_receiver').value, shipPhone: document.getElementById('inv_s_phone').value, shipAddress: document.getElementById('inv_s_addr').value, items: [], customerFile: null
+    };
+    const rows = document.getElementById('invBody').rows;
+    for(let r of rows) { const d = r.cells[0].querySelector('input').value; if(d) formData.items.push({ desc: d, qty: r.cells[1].querySelector('input').value, price: r.cells[2].querySelector('input').value }); }
+    
+    const run = async () => {
+      try { await callBackend("processINV", formData); alert("Invoice sukses dibuat!"); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; }
+    };
+    if (file) { const reader = new FileReader(); reader.onload = function(ev) { formData.customerFile = { data: ev.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
+  }
+
+  // MASTER DATA SUBMISSIONS
+  async function submitVendor() {
+    const d = { name: document.getElementById('new_v_name').value, pic: document.getElementById('new_v_pic').value, phone: document.getElementById('new_v_phone').value, address: document.getElementById('new_v_addr').value };
+    try { alert(await callBackend("saveNewVendor", d)); location.reload(); } catch(e) { alert(e.message); }
+  }
+  async function submitCustomer() {
+    const d = { customer: document.getElementById('new_c_name').value, project: document.getElementById('new_c_project').value, contractor: document.getElementById('new_c_contractor').value, receiver: document.getElementById('new_c_receiver').value, phone: document.getElementById('new_c_phone').value, address: document.getElementById('new_c_addr').value };
+    try { alert(await callBackend("saveNewCustomer", d)); location.reload(); } catch(e) { alert(e.message); }
+  }
+  async function submitItem() {
+    const d = { category: document.getElementById('new_i_cat').value, desc: document.getElementById('new_i_desc').value, size: document.getElementById('new_i_size').value, cost: document.getElementById('new_i_cost').value };
+    try { alert(await callBackend("saveNewItem", d)); location.reload(); } catch(e) { alert(e.message); }
+  }
+  async function submitKaryawan() {
+    const n = document.getElementById('new_k_nama').value;
+    try { alert(await callBackend("saveNewKaryawan", {nama: n})); location.reload(); } catch(e) { alert(e.message); }
+  }
+</script>
