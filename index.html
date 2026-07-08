@@ -70,7 +70,7 @@
       gap: 8px; 
       overflow-x: auto; 
       padding-bottom: 4px;
-      scrollbar-width: none; /* Hide scrollbar Chrome/Safari */
+      scrollbar-width: none;
     }
     .navbar-menu::-webkit-scrollbar { display: none; }
 
@@ -179,9 +179,7 @@
 
   <div class="app-container">
     
-    <!-- ========================================== -->
     <!-- PAGE 1: HOME -->
-    <!-- ========================================== -->
     <div id="page-home" class="page-view active">
       <div class="welcome-section">
         <h1>Welcome, PT. Cakra!</h1>
@@ -196,9 +194,7 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
     <!-- PAGE 2: PO -->
-    <!-- ========================================== -->
     <div id="page-po" class="page-view">
       <div class="slds-brand-header"><div class="icon-container"><i class="fa-solid fa-file-invoice"></i></div><div><h1>Create Purchase Order</h1><p>Formulir Pembuatan PO & Ekspor PDF Otomatis</p></div></div>
       <form id="poForm" onsubmit="handleFormSubmit(event)">
@@ -241,9 +237,7 @@
       </form>
     </div>
 
-    <!-- ========================================== -->
     <!-- PAGE 3: INV -->
-    <!-- ========================================== -->
     <div id="page-inv" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%);"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1 style="color: #bd02aa;">Create Invoice</h1><p>Formulir Penagihan & Ekspor PDF Otomatis</p></div></div>
       <form id="invForm" onsubmit="handleInvSubmit(event)">
@@ -295,9 +289,7 @@
       </form>
     </div>
 
-    <!-- ========================================== -->
     <!-- PAGE 4: KELOLA MASTER -->
-    <!-- ========================================== -->
     <div id="page-master" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fa-solid fa-database"></i></div><div><h1>Master Data Management</h1><p>Tambah data Customer, Vendor, Material, dan Karyawan baru ke Database</p></div></div>
       <div class="slds-grid">
@@ -335,9 +327,7 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
     <!-- PAGE 5: ABSEN KAMERA -->
-    <!-- ========================================== -->
     <div id="page-absen" class="page-view">
       <div class="slds-brand-header">
         <div class="icon-container" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fa-solid fa-camera"></i></div>
@@ -354,9 +344,7 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
     <!-- PAGE 6: REPORT SYSTEM -->
-    <!-- ========================================== -->
     <div id="page-report" class="page-view">
       <div class="slds-brand-header">
         <div class="icon-container" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);"><i class="fa-solid fa-chart-pie"></i></div>
@@ -365,7 +353,7 @@
       <div class="slds-grid" style="gap: 20px;">
         <div class="slds-card" style="flex:1; text-align: center;">
           <div class="slds-card__title" style="color: #7e22ce; border-bottom-color: #f3e8ff;"><i class="fa-solid fa-wallet"></i> Rekap Finansial (PO & INV)</div>
-          <p style="color: var(--sf-text-muted); font-size: 0.9rem;">Mengompilasi data transaksi, omset, dan total nominal rupiah dari form aktif.</p>
+          <p style="color: var(--sf-text-muted); font-size: 0.9rem;">Mengompilasi data transaksi, omset, and total nominal rupiah dari form aktif.</p>
           <button type="button" class="slds-button" onclick="generateReport('keuangan')" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); margin-top: 15px;"><i class="fa-solid fa-file-excel"></i> Generate Rekap PO & INV</button>
         </div>
         <div class="slds-card" style="flex:1; text-align: center;">
@@ -381,10 +369,8 @@
 </div>
 
 <script>
-  // ==========================================
-  // PENTING: PASTE URL WEB APP EXEC ANDA DI SINI
-  // ==========================================
-  const API_URL = "AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM";
+  // LINK VALID ANDA SUDAH SAYA SUNTIKKAN BERSIH DI SINI
+  const API_URL = "https://script.google.com/macros/s/AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM/exec";
 
   let vendorMaster = []; let customerMaster = []; let itemMaster = []; let karyawanMaster = [];
   let videoStream = null;
@@ -407,8 +393,8 @@
     document.getElementById('poDate').value = new Date().toISOString().split('T')[0];
     document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
     
-    fetch(API_URL + "?action=getPONumberSuggestion").then(r => r.text()).then(s => document.getElementById('poNumber').value = s);
-    fetch(API_URL + "?action=getINVNumberSuggestion").then(r => r.text()).then(s => document.getElementById('invNumber').value = s);
+    fetch(API_URL + "?action=getPONumberSuggestion").then(r => r.text()).then(s => { if(s) document.getElementById('poNumber').value = s; });
+    fetch(API_URL + "?action=getINVNumberSuggestion").then(r => r.text()).then(s => { if(s) document.getElementById('invNumber').value = s; });
     fetch(API_URL + "?action=getVendorMaster").then(r => r.json()).then(d => { vendorMaster = d; populateVendor(); });
     fetch(API_URL + "?action=getCustomerMaster").then(r => r.json()).then(d => { customerMaster = d; populateCustomerOptions(); });
     fetch(API_URL + "?action=getItemMaster").then(r => r.json()).then(d => { itemMaster = d; addItemRow(); addInvRow(); });
@@ -425,7 +411,7 @@
   async function bukaKameraKomputer() {
     const video = document.getElementById('webcam');
     try { videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } }); video.srcObject = videoStream; } 
-    catch (err) { document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera. Beri izin browser."; }
+    catch (err) { document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera."; }
   }
 
   function matikanKameraKomputer() { if (videoStream) { videoStream.getTracks().forEach(track => track.stop()); videoStream = null; } }
@@ -440,7 +426,6 @@
     catch (e) { alert("Gagal: " + e.message); }
   }
 
-  // LOGIKA PO
   function populateVendor() {
     const sel = document.getElementById('vendorSelect'); sel.innerHTML = '<option value="">-- Pilih Vendor --</option>';
     vendorMaster.forEach(v => { if(v.name) sel.add(new Option(v.name + " (PIC: " + v.pic + ")", v.name + " | " + v.pic)); });
@@ -473,8 +458,7 @@
   }
 
   function autoFillShipTo() {
-    const projVal = document.getElementById('projectSelect').value;
-    const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
+    const projVal = document.getElementById('projectSelect').value; const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
     if(match) { document.getElementById('s_project_name').value = match.project; document.getElementById('s_receiver').value = match.receiver; document.getElementById('s_phone').value = match.phone; document.getElementById('s_addr').value = match.address; }
   }
 
@@ -515,7 +499,6 @@
     if (file) { const reader = new FileReader(); reader.onload = function(ex) { formData.customerFile = { data: ex.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
-  // LOGIKA INVOICE + FITUR BARU ARA
   function checkAraInv() {
     const custVal = document.getElementById('invCustomerName').value;
     const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
@@ -579,7 +562,6 @@
     if (file) { const reader = new FileReader(); reader.onload = function(ev) { formData.customerFile = { data: ev.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
-  // REPORT ENGINE TRIGGER
   async function generateReport(jenis) {
     const statusPesan = document.getElementById('reportStatus'); statusPesan.innerHTML = "Sedang merangkum pembukuan di Google Sheets... Mohon tunggu."; statusPesan.style.color = "blue";
     try {
@@ -588,7 +570,6 @@
     } catch(e) { alert("Gagal: " + e.message); statusPesan.innerHTML = "Gagal memproses laporan."; statusPesan.style.color = "red"; }
   }
 
-  // MASTER SUBMISSIONS
   async function submitVendor() {
     const d = { name: document.getElementById('new_v_name').value, pic: document.getElementById('new_v_pic').value, phone: document.getElementById('new_v_phone').value, address: document.getElementById('new_v_addr').value };
     try { alert(await callBackend("saveNewVendor", d)); location.reload(); } catch(e) { alert(e.message); }
