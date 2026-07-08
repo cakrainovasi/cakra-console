@@ -1,96 +1,168 @@
-<!-- Cakra Console V2.5 - Frontend Standalone GitHub Pages -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cakra Automation Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-  :root {
-    --ck-blue-brand: #1d4ed8;
-    --ck-pink-brand: #f000d6;
-    --ck-pink-hover: #bd02aa;
-    --ck-pink-light: #fdf2f8;
-    --sf-bg: #fdf2f8;
-    --sf-border: #e9d5ff;
-    --sf-text-dark: #1f2937;
-    --sf-text-muted: #6b7280;
-    --sf-shadow-pro: 0 10px 20px rgba(189, 2, 170, 0.05), 0 3px 6px rgba(0, 0, 0, 0.03);
-  }
+  <style>
+    :root {
+      --ck-blue-brand: #1d4ed8;
+      --ck-pink-brand: #f000d6;
+      --ck-pink-hover: #bd02aa;
+      --ck-pink-light: #fdf2f8;
+      --sf-bg: #fdf2f8;
+      --sf-border: #e9d5ff;
+      --sf-text-dark: #1f2937;
+      --sf-text-muted: #6b7280;
+      --sf-shadow-pro: 0 10px 20px rgba(189, 2, 170, 0.05), 0 3px 6px rgba(0, 0, 0, 0.03);
+    }
 
-  body, .cakra-body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #fdf2f8 0%, #e0f2fe 100%);
-    margin: 0; padding: 0;
-    color: var(--sf-text-dark);
-    min-height: 100vh;
-  }
+    body, .cakra-body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fdf2f8 0%, #e0f2fe 100%);
+      margin: 0; padding: 0;
+      color: var(--sf-text-dark);
+      min-height: 100vh;
+    }
 
-  .top-navbar {
-    background: #ffffff;
-    color: var(--sf-text-dark); padding: 12px 40px;
-    display: flex; justify-content: space-between; align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
-    border-bottom: 2px solid var(--sf-border);
-  }
-  .navbar-brand { font-family: 'Public Sans', sans-serif; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--ck-blue-brand); }
-  .navbar-brand i { color: var(--ck-pink-brand); }
-  
-  .navbar-menu { display: flex; gap: 15px; }
-  .nav-btn { background: transparent; border: 1px solid transparent; color: var(--sf-text-muted); padding: 8px 18px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;}
-  .nav-btn:hover { background: #fee2e2; color: var(--ck-pink-hover); }
-  .nav-btn.active { background: var(--ck-pink-brand); color: #fff; box-shadow: 0 4px 8px rgba(240, 0, 214, 0.2); }
+    /* Navbar Responsive */
+    .top-navbar {
+      background: #ffffff;
+      color: var(--sf-text-dark); 
+      padding: 12px 20px;
+      display: flex; 
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+      position: sticky; 
+      top: 0; 
+      z-index: 100;
+      border-bottom: 2px solid var(--sf-border);
+    }
+    
+    @media (min-width: 768px) {
+      .top-navbar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 40px;
+      }
+    }
 
-  .app-container { padding: 40px; }
-  .page-view { display: none; animation: fadeIn 0.4s ease; }
-  .page-view.active { display: block; }
+    .navbar-brand { 
+      font-family: 'Public Sans', sans-serif; 
+      font-size: 1.2rem; 
+      font-weight: 800; 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      cursor: pointer; 
+      color: var(--ck-blue-brand);
+      justify-content: center;
+    }
+    .navbar-brand i { color: var(--ck-pink-brand); }
+    
+    .navbar-menu { 
+      display: flex; 
+      gap: 8px; 
+      overflow-x: auto; 
+      padding-bottom: 4px;
+      scrollbar-width: none; /* Hide scrollbar Chrome/Safari */
+    }
+    .navbar-menu::-webkit-scrollbar { display: none; }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .nav-btn { 
+      background: transparent; 
+      border: 1px solid transparent; 
+      color: var(--sf-text-muted); 
+      padding: 8px 14px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      transition: 0.2s; 
+      font-weight: 600; 
+      font-size: 0.85rem; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .nav-btn:hover { background: #fee2e2; color: var(--ck-pink-hover); }
+    .nav-btn.active { background: var(--ck-pink-brand); color: #fff; box-shadow: 0 4px 8px rgba(240, 0, 214, 0.2); }
 
-  .welcome-section { margin-bottom: 30px; text-align: center; }
-  .welcome-section h1 { font-family: 'Public Sans', sans-serif; font-size: 2.2rem; color: var(--ck-blue-brand); margin: 0 0 5px 0; font-weight: 800;}
-  .welcome-section p { color: var(--sf-text-muted); margin: 0; font-size: 1.1rem; }
+    /* Container & Grid Responsive */
+    .app-container { padding: 15px; }
+    @media (min-width: 768px) { .app-container { padding: 40px; } }
 
-  .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-  .dash-card {
-    background: #fff; border-radius: 20px; padding: 35px 25px;
-    box-shadow: var(--sf-shadow-pro); text-align: center; cursor: pointer;
-    transition: all 0.3s ease; border: 2px solid transparent; position: relative; overflow: hidden;
-  }
-  .dash-card:hover { transform: translateY(-5px); border-color: #fbcfe8; box-shadow: 0 15px 30px rgba(189, 2, 170, 0.1); }
-  .dash-icon { width: 75px; height: 75px; border-radius: 20px; background: #fae8ff; color: var(--ck-pink-brand); font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px auto; transition: 0.3s; }
-  .dash-card:hover .dash-icon { background: var(--ck-blue-brand); color: #fff; transform: rotate(-5deg); }
-  .dash-title { font-size: 1.25rem; font-weight: 700; color: var(--sf-text-dark); margin-bottom: 12px; font-family: 'Public Sans', sans-serif; }
-  
-  .slds-brand-header { background: #ffffff; padding: 25px 40px; border-radius: 16px; border-left: 8px solid var(--ck-pink-brand); margin-bottom: 35px; box-shadow: var(--sf-shadow-pro); display: flex; align-items: center; gap: 25px; border: 1px solid var(--sf-border); }
-  .icon-container { background: linear-gradient(135deg, var(--ck-pink-brand) 0%, var(--ck-blue-brand) 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; flex-shrink: 0; box-shadow: 0 5px 10px rgba(189, 2, 170, 0.2); }
-  .slds-brand-header h1 { margin: 0; font-size: 1.7rem; color: var(--ck-blue-brand); font-weight: 800; font-family: 'Public Sans', sans-serif;}
-  
-  .slds-card { background: #ffffff; border: 1px solid var(--sf-border); border-radius: 16px; padding: 35px; margin-bottom: 30px; box-shadow: var(--sf-shadow-pro); }
-  .slds-card__title { font-family: 'Public Sans', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 30px; color: var(--ck-pink-brand); display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #fae8ff; padding-bottom: 15px; }
-  
-  .slds-grid { display: flex; flex-wrap: wrap; gap: 25px; }
-  .slds-form-element { flex: 1; min-width: 280px; }
-  .slds-form-element__label { display: block; font-size: 0.8rem; color: var(--sf-text-muted); margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-  
-  .slds-input, .slds-select { width: 100%; padding: 14px 18px; border: 2px solid #f0f0f0; border-radius: 10px; background-color: #fdfdfd; font-size: 0.95rem; box-sizing: border-box; transition: 0.3s; color: var(--sf-text-dark); }
-  .slds-input:focus, .slds-select:focus { border-color: var(--ck-pink-brand); background-color: #fff; outline: 0; box-shadow: 0 0 0 4px rgba(240, 0, 214, 0.1); }
-  
-  table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; border: 1px solid var(--sf-border); overflow: hidden; margin-top: 20px; }
-  th { background: #fff1f2; color: var(--ck-pink-hover); font-size: 0.8rem; font-weight: 700; padding: 18px; border-bottom: 2px solid var(--sf-border); text-align: left; text-transform: uppercase; letter-spacing: 1px; }
-  td { padding: 18px; border-bottom: 1px solid #fdf2f8; background: #fff; }
+    .page-view { display: none; animation: fadeIn 0.4s ease; }
+    .page-view.active { display: block; }
 
-  .slds-button { background: linear-gradient(135deg, var(--ck-blue-brand) 0%, var(--ck-pink-brand) 100%); color: #fff; border: none; padding: 16px 30px; font-size: 1rem; border-radius: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 6px 12px rgba(189, 2, 170, 0.2); transition: 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
-  .slds-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(189, 2, 170, 0.3); filter: brightness(1.1); }
-  .slds-button:disabled { background: #d1d5db; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
-  .slds-button--neutral { background: #fff; color: var(--ck-pink-brand); border: 2px solid var(--ck-pink-brand); width: auto; box-shadow: none; margin-top: 10px; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;}
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  .camera-box { width: 100%; max-width: 320px; height: 240px; background: #1e293b; border-radius: 12px; margin: 15px auto; overflow: hidden; border: 3px solid var(--sf-border); position: relative; }
-  video, canvas { width: 100%; height: 100%; object-fit: cover; }
-  
-  /* Style tombol switch mode item list di invoice */
-  .switch-mode-btn { background: #f3f4f6; border: 1px solid #d1d5db; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; transition: 0.2s; }
-  .switch-mode-btn:hover { background: #e5e7eb; color: var(--ck-pink-brand); }
-</style>
+    .welcome-section { margin-bottom: 30px; text-align: center; }
+    .welcome-section h1 { font-family: 'Public Sans', sans-serif; font-size: 1.8rem; color: var(--ck-blue-brand); margin: 0 0 5px 0; font-weight: 800;}
+    @media (min-width: 768px) { .welcome-section h1 { font-size: 2.2rem; } }
+    .welcome-section p { color: var(--sf-text-muted); margin: 0; font-size: 1rem; }
+
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; }
+    @media (min-width: 768px) { .dashboard-grid { gap: 25px; } }
+
+    .dash-card {
+      background: #fff; border-radius: 20px; padding: 25px 15px;
+      box-shadow: var(--sf-shadow-pro); text-align: center; cursor: pointer;
+      transition: all 0.3s ease; border: 2px solid transparent; position: relative; overflow: hidden;
+    }
+    .dash-card:hover { transform: translateY(-5px); border-color: #fbcfe8; box-shadow: 0 15px 30px rgba(189, 2, 170, 0.1); }
+    .dash-icon { width: 65px; height: 65px; border-radius: 20px; background: #fae8ff; color: var(--ck-pink-brand); font-size: 1.8rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; transition: 0.3s; }
+    .dash-card:hover .dash-icon { background: var(--ck-blue-brand); color: #fff; transform: rotate(-5deg); }
+    .dash-title { font-size: 1.1rem; font-weight: 700; color: var(--sf-text-dark); margin-bottom: 12px; font-family: 'Public Sans', sans-serif; }
+    
+    /* Brand Header */
+    .slds-brand-header { background: #ffffff; padding: 20px; border-radius: 16px; border-left: 8px solid var(--ck-pink-brand); margin-bottom: 25px; box-shadow: var(--sf-shadow-pro); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; border: 1px solid var(--sf-border); }
+    @media (min-width: 768px) { .slds-brand-header { flex-direction: row; text-align: left; padding: 25px 40px; } }
+    
+    .icon-container { background: linear-gradient(135deg, var(--ck-pink-brand) 0%, var(--ck-blue-brand) 100%); width: 55px; height: 55px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 5px 10px rgba(189, 2, 170, 0.2); }
+    .slds-brand-header h1 { margin: 0; font-size: 1.4rem; color: var(--ck-blue-brand); font-weight: 800; font-family: 'Public Sans', sans-serif;}
+    @media (min-width: 768px) { .slds-brand-header h1 { font-size: 1.7rem; } }
+
+    .slds-card { background: #ffffff; border: 1px solid var(--sf-border); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: var(--sf-shadow-pro); }
+    @media (min-width: 768px) { .slds-card { padding: 35px; margin-bottom: 30px; } }
+    .slds-card__title { font-family: 'Public Sans', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--ck-pink-brand); display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #fae8ff; padding-bottom: 12px; }
+    
+    /* Grid Form Responsive */
+    .slds-grid { display: flex; flex-direction: column; gap: 15px; }
+    @media (min-width: 768px) { .slds-grid { flex-direction: row; flex-wrap: wrap; gap: 25px; } }
+    .slds-form-element { flex: 1; min-width: 100%; }
+    @media (min-width: 768px) { .slds-form-element { min-width: 240px; } }
+    .slds-form-element__label { display: block; font-size: 0.75rem; color: var(--sf-text-muted); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .slds-input, .slds-select { width: 100%; padding: 12px 16px; border: 2px solid #f0f0f0; border-radius: 10px; background-color: #fdfdfd; font-size: 0.9rem; box-sizing: border-box; transition: 0.3s; color: var(--sf-text-dark); }
+    .slds-input:focus, .slds-select:focus { border-color: var(--ck-pink-brand); background-color: #fff; outline: 0; box-shadow: 0 0 0 4px rgba(240, 0, 214, 0.1); }
+    
+    /* Tabel Responsive Container */
+    .table-container { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 12px; border: 1px solid var(--sf-border); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; min-width: 600px; }
+    th { background: #fff1f2; color: var(--ck-pink-hover); font-size: 0.75rem; font-weight: 700; padding: 14px; border-bottom: 2px solid var(--sf-border); text-align: left; text-transform: uppercase; letter-spacing: 1px; }
+    td { padding: 14px; border-bottom: 1px solid #fdf2f8; background: #fff; vertical-align: middle; }
+
+    .slds-button { background: linear-gradient(135deg, var(--ck-blue-brand) 0%, var(--ck-pink-brand) 100%); color: #fff; border: none; padding: 14px 24px; font-size: 0.95rem; border-radius: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 6px 12px rgba(189, 2, 170, 0.2); transition: 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; }
+    .slds-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(189, 2, 170, 0.3); filter: brightness(1.1); }
+    .slds-button:disabled { background: #d1d5db; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+    .slds-button--neutral { background: #fff; color: var(--ck-pink-brand); border: 2px solid var(--ck-pink-brand); width: auto; box-shadow: none; margin-top: 10px; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;}
+
+    .camera-box { width: 100%; max-width: 320px; height: 240px; background: #1e293b; border-radius: 12px; margin: 15px auto; overflow: hidden; border: 3px solid var(--sf-border); position: relative; }
+    video, canvas { width: 100%; height: 100%; object-fit: cover; }
+    
+    .switch-mode-btn { background: #f3f4f6; border: 1px solid #d1d5db; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; transition: 0.2s; white-space: nowrap; }
+    .switch-mode-btn:hover { background: #e5e7eb; color: var(--ck-pink-brand); }
+  </style>
+</head>
+<body>
 
 <div class="cakra-body">
+  <!-- Top Bar Navbar -->
   <nav class="top-navbar">
     <div class="navbar-brand" onclick="navigateTo('home')"><i class="fa-solid fa-bolt"></i> PT. CAKRA INOVASI KREASINDO</div>
     <div class="navbar-menu">
@@ -99,6 +171,7 @@
       <button class="nav-btn" id="nav-inv" onclick="navigateTo('inv')"><i class="fa-solid fa-file-invoice-dollar"></i> Create INV</button>
       <button class="nav-btn" id="nav-master" onclick="navigateTo('master')"><i class="fa-solid fa-database"></i> Master Data</button>
       <button class="nav-btn" id="nav-absen" onclick="navigateTo('absen')"><i class="fa-solid fa-camera"></i> Absen Foto</button>
+      <button class="nav-btn" id="nav-report" onclick="navigateTo('report')"><i class="fa-solid fa-chart-line"></i> Report System</button>
     </div>
   </nav>
 
@@ -106,21 +179,26 @@
 
   <div class="app-container">
     
-    <!-- PAGE HOME -->
+    <!-- ========================================== -->
+    <!-- PAGE 1: HOME -->
+    <!-- ========================================== -->
     <div id="page-home" class="page-view active">
       <div class="welcome-section">
         <h1>Welcome, PT. Cakra!</h1>
-        <p>System Frontend via GitHub Pages is secure. Choose a task:</p>
+        <p>System Frontend Hub is operational & Mobile Responsive. Choose a task:</p>
       </div>
       <div class="dashboard-grid">
         <div class="dash-card" onclick="navigateTo('po')"><div class="dash-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div class="dash-title">Purchase Order (PO)</div></div>
         <div class="dash-card" onclick="navigateTo('inv')"><div class="dash-icon" style="background:#fdf2f8; color:#f000d6;"><i class="fa-solid fa-file-signature"></i></div><div class="dash-title">Create Invoice (INV)</div></div>
         <div class="dash-card" onclick="navigateTo('master')"><div class="dash-icon" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-users-gear"></i></div><div class="dash-title">Kelola Master Data</div></div>
         <div class="dash-card" onclick="navigateTo('absen')"><div class="dash-icon" style="background:#e0e7ff; color:#1d4ed8;"><i class="fa-solid fa-camera"></i></div><div class="dash-title">Absen Foto Wajah</div></div>
+        <div class="dash-card" onclick="navigateTo('report')"><div class="dash-icon" style="background:#f3e8ff; color:#7e22ce;"><i class="fa-solid fa-chart-pie"></i></div><div class="dash-title">Report System</div></div>
       </div>
     </div>
 
-    <!-- PAGE PO -->
+    <!-- ========================================== -->
+    <!-- PAGE 2: PO -->
+    <!-- ========================================== -->
     <div id="page-po" class="page-view">
       <div class="slds-brand-header"><div class="icon-container"><i class="fa-solid fa-file-invoice"></i></div><div><h1>Create Purchase Order</h1><p>Formulir Pembuatan PO & Ekspor PDF Otomatis</p></div></div>
       <form id="poForm" onsubmit="handleFormSubmit(event)">
@@ -133,16 +211,16 @@
               <label class="slds-form-element__label">Pilih Customer</label>
               <select id="customerSelect" class="slds-select" onchange="handleCustomerChange()" required><option value="">-- Pilih Customer --</option></select>
               <div id="customerBaruInputContainer" style="display:none; margin-top:10px;">
-                <label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Nama Customer/PT Baru (Free Text)</label>
+                <label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Nama Customer Baru</label>
                 <input type="text" id="customerBaruNama" class="slds-input" placeholder="Ketik Nama PT / Customer Baru...">
               </div>
             </div>
           </div>
-          <div class="slds-grid" style="margin-top: 20px; align-items: center;">
+          <div class="slds-grid" style="margin-top: 20px;">
             <div class="slds-form-element"><label class="slds-form-element__label">Nomor PO dari Customer</label><input type="text" id="customerPONumber" class="slds-input" placeholder="e.g. 025/ARK-PO/VI/2026"></div>
             <div class="slds-form-element"><label class="slds-form-element__label">Upload Berkas PO Customer</label><input type="file" id="customerFile" class="slds-input" accept=".pdf,image/*"></div>
             <div class="slds-form-element"><label class="slds-form-element__label">Prepared By (Staff)</label><select id="poPreparedBy" class="slds-select" required><option value="Shiva">Shiva</option><option value="Maharani">Maharani</option></select></div>
-            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 25px;"><input type="checkbox" id="includePPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="includePPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
+            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 15px;"><input type="checkbox" id="includePPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="includePPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
           </div>
         </div>
         <div class="slds-grid" style="align-items: stretch;">
@@ -152,34 +230,20 @@
               <div class="slds-form-element"><label class="slds-form-element__label">Phone</label><input type="text" id="s_phone" class="slds-input" required></div>
             </div><div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Kirim</label><textarea id="s_addr" class="slds-input" required></textarea></div></div>
         </div>
-        <div class="slds-card"><div class="slds-card__title">Item List (Material)</div><table id="itemTable"><thead><tr><th>Deskripsi</th><th style="width:120px;">Size</th><th style="width:120px;">Qty</th><th style="width:220px;">Harga Satuan</th><th style="width:50px;"></th></tr></thead><tbody id="itemBody"></tbody></table><button type="button" class="slds-button--neutral" onclick="addItemRow()">+ Tambah Item</button></div>
+        <div class="slds-card">
+          <div class="slds-card__title">Item List (Material)</div>
+          <div class="table-container">
+            <table id="itemTable"><thead><tr><th>Deskripsi</th><th style="width:120px;">Size</th><th style="width:100px;">Qty</th><th style="width:200px;">Harga Satuan</th><th style="width:50px;"></th></tr></thead><tbody id="itemBody"></tbody></table>
+          </div>
+          <button type="button" class="slds-button--neutral" onclick="addItemRow()">+ Tambah Item</button>
+        </div>
         <div style="text-align:center; padding: 20px 0 60px 0;"><button type="submit" id="submitBtn" class="slds-button"><i class="fa-solid fa-file-pdf"></i> BUAT PO & GENERATE PDF</button></div>
       </form>
     </div>
 
-    <!-- PAGE ABSEN -->
-    <div id="page-absen" class="page-view">
-      <div class="slds-brand-header">
-        <div class="icon-container" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fa-solid fa-camera"></i></div>
-        <div><h1 style="color: #1d4ed8;">Absensi Foto Wajah</h1><p>Pilih nama Anda, pastikan wajah terlihat di kamera harian</p></div>
-      </div>
-      <div class="slds-card" style="max-width: 500px; margin: 0 auto; text-align:center;">
-        <div class="slds-form-element" style="text-align:left;">
-          <label class="slds-form-element__label">Pilih Nama</label>
-          <select id="absenNama" class="slds-select"><option value="">-- Memuat Nama... --</option></select>
-        </div>
-        <div class="camera-box">
-          <video id="webcam" autoplay playsinline></video>
-          <canvas id="canvas" style="display:none;"></canvas>
-        </div>
-        <button type="button" class="slds-button" onclick="submitAbsenDenganFoto()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-          <i class="fa-solid fa-camera-retro"></i> Ambil Foto & Kirim Absen
-        </button>
-        <p id="pesanStatus" style="font-weight: 700; margin-top: 20px; font-size: 1.1rem;"></p>
-      </div>
-    </div>
-
-    <!-- PAGE INV -->
+    <!-- ========================================== -->
+    <!-- PAGE 3: INV -->
+    <!-- ========================================== -->
     <div id="page-inv" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%);"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1 style="color: #bd02aa;">Create Invoice</h1><p>Formulir Penagihan & Ekspor PDF Otomatis</p></div></div>
       <form id="invForm" onsubmit="handleInvSubmit(event)">
@@ -188,34 +252,18 @@
           <div class="slds-grid">
             <div class="slds-form-element"><label class="slds-form-element__label">Invoice Number</label><input type="text" id="invNumber" class="slds-input" required><small id="invSuggestionHelp" style="display:block; margin-top:6px; color: #f000d6; font-size:0.75rem; font-weight:600;"></small></div>
             <div class="slds-form-element"><label class="slds-form-element__label">Invoice Date</label><input type="date" id="invDate" class="slds-input" required></div>
-            
-            <!-- UPDATE: Nama Project Bisa Dropdown jika ARA / Ketik Bebas jika Reguler -->
             <div class="slds-form-element">
               <label class="slds-form-element__label">Project Name</label>
               <input type="text" id="invProjectText" class="slds-input" required placeholder="Ketik nama project...">
               <select id="invProjectSelectARA" class="slds-select" style="display:none;"></select>
             </div>
-
-            <!-- UPDATE: NO. PO REF bisa otomatis suggestion jika trigger ARA -->
-            <div class="slds-form-element">
-              <label class="slds-form-element__label">No. PO Ref (Customer)</label>
-              <input type="text" id="invPoRef" class="slds-input" placeholder="Ketik / Suggestion ARA otomatis...">
-            </div>
+            <div class="slds-form-element"><label class="slds-form-element__label">No. PO Ref (Customer)</label><input type="text" id="invPoRef" class="slds-input" placeholder="Ketik / Auto Suggestion ARA..."></div>
           </div>
           <div class="slds-grid" style="margin-top: 20px; align-items: center;">
-            <div class="slds-form-element" style="flex: 2;"><label class="slds-form-element__label">Nama Customer (Pilih/Ketik)</label><input type="text" id="invCustomerName" class="slds-input" list="customerList" oninput="checkAraInv()" placeholder="Ketik nama atau pilih..." required></div>
-            <div class="slds-form-element" style="flex: 1;"><label class="slds-form-element__label">Upload Berkas PO (Optional)</label><input type="file" id="invCustomerFile" class="slds-input" accept=".pdf,image/*"></div>
-            
-            <!-- UPDATE: Tambahan Pilihan Nama Pembuat (Prepared By Staff) -->
-            <div class="slds-form-element" style="flex: 1;">
-              <label class="slds-form-element__label">Prepared By (Staff)</label>
-              <select id="invPreparedBy" class="slds-select" required>
-                <option value="Shiva">Shiva</option>
-                <option value="Maharani">Maharani</option>
-              </select>
-            </div>
-            
-            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 25px;"><input type="checkbox" id="invPPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="invPPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
+            <div class="slds-form-element" style="flex: 2;"><label class="slds-form-element__label">Nama Customer</label><input type="text" id="invCustomerName" class="slds-input" list="customerList" oninput="checkAraInv()" placeholder="Ketik nama atau pilih..." required></div>
+            <div class="slds-form-element" style="flex: 1;"><label class="slds-form-element__label">Upload Berkas PO</label><input type="file" id="invCustomerFile" class="slds-input" accept=".pdf,image/*"></div>
+            <div class="slds-form-element" style="flex: 1;"><label class="slds-form-element__label">Prepared By (Staff)</label><select id="invPreparedBy" class="slds-select" required><option value="Shiva">Shiva</option><option value="Maharani">Maharani</option></select></div>
+            <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 15px;"><input type="checkbox" id="invPPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="invPPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
           </div>
         </div>
         <div class="slds-grid" style="align-items: stretch;">
@@ -236,42 +284,33 @@
             <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Lapangan</label><textarea id="inv_s_addr" class="slds-input" style="height:65px;" required></textarea></div>
           </div>
         </div>
-        
-        <!-- UPDATE: Tabel Item List Menggunakan Fitur Switch Mode (Pilih / Tulis Bebas) -->
         <div class="slds-card">
           <div class="slds-card__title"><i class="fa-solid fa-list-ol"></i> Item List (Kombinasi Dinamis)</div>
-          <table id="invTable">
-            <thead>
-              <tr>
-                <th>Deskripsi Pekerjaan / Material</th>
-                <th style="width:130px;">Mode Input</th>
-                <th style="width:100px;">Qty</th>
-                <th style="width:220px;">Unit Price (Rp)</th>
-                <th style="width:50px;"></th>
-              </tr>
-            </thead>
-            <tbody id="invBody"></tbody>
-          </table>
+          <div class="table-container">
+            <table id="invTable"><thead><tr><th>Deskripsi Pekerjaan / Material</th><th style="width:130px;">Mode Input</th><th style="width:100px;">Qty</th><th style="width:220px;">Unit Price (Rp)</th><th style="width:50px;"></th></tr></thead><tbody id="invBody"></tbody></table>
+          </div>
           <button type="button" class="slds-button--neutral" onclick="addInvRow()"><i class="fa-solid fa-circle-plus"></i> Tambah Item Tagihan</button>
         </div>
         <div style="text-align:center; padding: 20px 0 60px 0;"><button type="submit" id="invSubmitBtn" class="slds-button" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%); max-width:400px;"><i class="fa-solid fa-file-pdf"></i> BUAT INV & GENERATE PDF</button></div>
       </form>
     </div>
 
-    <!-- PAGE MASTER -->
+    <!-- ========================================== -->
+    <!-- PAGE 4: KELOLA MASTER -->
+    <!-- ========================================== -->
     <div id="page-master" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fa-solid fa-database"></i></div><div><h1>Master Data Management</h1><p>Tambah data Customer, Vendor, Material, dan Karyawan baru ke Database</p></div></div>
       <div class="slds-grid">
-        <div class="slds-card" style="flex:1; min-width: 250px;">
-          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-plus"></i> Input Vendor Baru</div>
+        <div class="slds-card" style="flex:1;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-plus"></i> Input Vendor</div>
           <div class="slds-form-element"><label class="slds-form-element__label">Nama Vendor / PT</label><input type="text" id="new_v_name" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">Nama PIC</label><input type="text" id="new_v_pic" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">No HP PIC</label><input type="text" id="new_v_phone" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">Alamat Lengkap</label><textarea id="new_v_addr" class="slds-input" style="height:60px;"></textarea></div><br>
           <button type="button" class="slds-button" onclick="submitVendor()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Vendor</button>
         </div>
-        <div class="slds-card" style="flex:1; min-width: 250px;">
-          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-building-circle-check"></i> Input Customer Baru</div>
+        <div class="slds-card" style="flex:1;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-building-circle-check"></i> Input Customer</div>
           <div class="slds-form-element"><label class="slds-form-element__label">Nama Customer Induk</label><input type="text" id="new_c_name" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">Nama Project</label><input type="text" id="new_c_project" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">Nama Kontraktor</label><input type="text" id="new_c_contractor" class="slds-input"></div><br>
@@ -280,7 +319,7 @@
           <div class="slds-form-element"><label class="slds-form-element__label">Alamat Pengiriman</label><textarea id="new_c_addr" class="slds-input" style="height:60px;"></textarea></div><br>
           <button type="button" class="slds-button" onclick="submitCustomer()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Customer</button>
         </div>
-        <div class="slds-card" style="flex:1; min-width: 250px;">
+        <div class="slds-card" style="flex:1;">
           <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-box-open"></i> Input Item Baru</div>
           <div class="slds-form-element"><label class="slds-form-element__label">Kategori</label><input type="text" id="new_i_cat" class="slds-input"></div><br>
           <div class="slds-form-element"><label class="slds-form-element__label">Deskripsi Item</label><input type="text" id="new_i_desc" class="slds-input"></div><br>
@@ -288,20 +327,64 @@
           <div class="slds-form-element"><label class="slds-form-element__label">Harga Satuan (Rp)</label><input type="number" id="new_i_cost" class="slds-input"></div><br>
           <button type="button" class="slds-button" onclick="submitItem()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Item</button>
         </div>
-        <div class="slds-card" style="flex:1; min-width: 250px;">
-          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-gear"></i> Input Karyawan Baru</div>
-          <div class="slds-form-element"><label class="slds-form-element__label">Nama Lengkap Karyawan</label><input type="text" id="new_k_nama" class="slds-input"></div><br><br><br><br><br>
+        <div class="slds-card" style="flex:1;">
+          <div class="slds-card__title" style="color: #059669; border-bottom-color: #d1fae5;"><i class="fa-solid fa-user-gear"></i> Input Karyawan</div>
+          <div class="slds-form-element"><label class="slds-form-element__label">Nama Lengkap Karyawan</label><input type="text" id="new_k_nama" class="slds-input"></div><br>
           <button type="button" class="slds-button" onclick="submitKaryawan()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Simpan Karyawan</button>
         </div>
       </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- PAGE 5: ABSEN KAMERA -->
+    <!-- ========================================== -->
+    <div id="page-absen" class="page-view">
+      <div class="slds-brand-header">
+        <div class="icon-container" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fa-solid fa-camera"></i></div>
+        <div><h1 style="color: #1d4ed8;">Absensi Foto Wajah</h1><p>Pilih nama Anda, pastikan wajah terlihat di kamera harian</p></div>
+      </div>
+      <div class="slds-card" style="max-width: 500px; margin: 0 auto; text-align:center;">
+        <div class="slds-form-element" style="text-align:left;">
+          <label class="slds-form-element__label">Pilih Nama</label>
+          <select id="absenNama" class="slds-select"><option value="">-- Memuat Nama... --</option></select>
+        </div>
+        <div class="camera-box"><video id="webcam" autoplay playsinline></video><canvas id="canvas" style="display:none;"></canvas></div>
+        <button type="button" class="slds-button" onclick="submitAbsenDenganFoto()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fa-solid fa-camera-retro"></i> Ambil Foto & Kirim Absen</button>
+        <p id="pesanStatus" style="font-weight: 700; margin-top: 20px; font-size: 1.1rem;"></p>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PAGE 6: REPORT SYSTEM -->
+    <!-- ========================================== -->
+    <div id="page-report" class="page-view">
+      <div class="slds-brand-header">
+        <div class="icon-container" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);"><i class="fa-solid fa-chart-pie"></i></div>
+        <div><h1 style="color: #7e22ce;">Cakra Report System</h1><p>Generate rekapitulasi otomatis langsung menjadi sheet baru siap cetak</p></div>
+      </div>
+      <div class="slds-grid" style="gap: 20px;">
+        <div class="slds-card" style="flex:1; text-align: center;">
+          <div class="slds-card__title" style="color: #7e22ce; border-bottom-color: #f3e8ff;"><i class="fa-solid fa-wallet"></i> Rekap Finansial (PO & INV)</div>
+          <p style="color: var(--sf-text-muted); font-size: 0.9rem;">Mengompilasi data transaksi, omset, dan total nominal rupiah dari form aktif.</p>
+          <button type="button" class="slds-button" onclick="generateReport('keuangan')" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); margin-top: 15px;"><i class="fa-solid fa-file-excel"></i> Generate Rekap PO & INV</button>
+        </div>
+        <div class="slds-card" style="flex:1; text-align: center;">
+          <div class="slds-card__title" style="color: #7e22ce; border-bottom-color: #f3e8ff;"><i class="fa-solid fa-calendar-days"></i> Rekap Absensi Karyawan</div>
+          <p style="color: var(--sf-text-muted); font-size: 0.9rem;">Mengubah data log harian menjadi tabel matriks horizontal tanggal 1-31.</p>
+          <button type="button" class="slds-button" onclick="generateReport('absensi')" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); margin-top: 15px;"><i class="fa-solid fa-table"></i> Generate Matriks Absen</button>
+        </div>
+      </div>
+      <p id="reportStatus" style="font-weight: 700; text-align: center; margin-top: 30px; font-size: 1.1rem; color: #7e22ce;"></p>
+    </div>
+
   </div>
 </div>
 
-
 <script>
-  // Silakan ganti dengan URL Web App Exec Anda yang valid
-  const API_URL = "https://script.google.com/macros/s/AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM/exec";
+  // ==========================================
+  // PENTING: PASTE URL WEB APP EXEC ANDA DI SINI
+  // ==========================================
+  const API_URL = "GANTI_DENGAN_URL_WEB_APP_ANDA";
 
   let vendorMaster = []; let customerMaster = []; let itemMaster = []; let karyawanMaster = [];
   let videoStream = null;
@@ -312,6 +395,7 @@
     const target = document.getElementById('page-' + pageId); if(target) target.classList.add('active');
     const btn = document.getElementById('nav-' + pageId); if(btn) btn.classList.add('active');
     if (pageId === 'absen') { bukaKameraKomputer(); } else { matikanKameraKomputer(); }
+    window.scrollTo(0,0);
   }
 
   async function callBackend(action, dataPayload) {
@@ -341,14 +425,14 @@
   async function bukaKameraKomputer() {
     const video = document.getElementById('webcam');
     try { videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } }); video.srcObject = videoStream; } 
-    catch (err) { document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera."; }
+    catch (err) { document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera. Beri izin browser."; }
   }
 
   function matikanKameraKomputer() { if (videoStream) { videoStream.getTracks().forEach(track => track.stop()); videoStream = null; } }
 
   async function submitAbsenDenganFoto() {
     const nama = document.getElementById('absenNama').value; if (!nama) return alert("Pilih nama Anda!");
-    const pesan = document.getElementById('pesanStatus'); pesan.innerHTML = "Sedang memproses...";
+    const pesan = document.getElementById('pesanStatus'); pesan.innerHTML = "Sedang mengirim log absen...";
     const video = document.getElementById('webcam'); const canvas = document.getElementById('canvas');
     canvas.getContext('2d').drawImage(video, 0, 0, 320, 240);
     const rawImageBase64 = canvas.toDataURL('image/png').split(',')[1];
@@ -356,9 +440,7 @@
     catch (e) { alert("Gagal: " + e.message); }
   }
 
-  // ==========================================
-  // LOGIKA PO 
-  // ==========================================
+  // LOGIKA PO
   function populateVendor() {
     const sel = document.getElementById('vendorSelect'); sel.innerHTML = '<option value="">-- Pilih Vendor --</option>';
     vendorMaster.forEach(v => { if(v.name) sel.add(new Option(v.name + " (PIC: " + v.pic + ")", v.name + " | " + v.pic)); });
@@ -433,155 +515,80 @@
     if (file) { const reader = new FileReader(); reader.onload = function(ex) { formData.customerFile = { data: ex.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
-  // ==========================================
-  // LOGIKA INVOICE (UPDATE PT. ARA TERBARU)
-  // ==========================================
+  // LOGIKA INVOICE + FITUR BARU ARA
   function checkAraInv() {
     const custVal = document.getElementById('invCustomerName').value;
     const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
-    
-    const txtProj = document.getElementById('invProjectText');
-    const selProjARA = document.getElementById('invProjectSelectARA');
-    const poRefInput = document.getElementById('invPoRef');
-    const projContainer = document.getElementById('invProjSelectContainer'); 
-    const projSelect = document.getElementById('invProjectSelect');
+    const txtProj = document.getElementById('invProjectText'); const selProjARA = document.getElementById('invProjectSelectARA');
+    const poRefInput = document.getElementById('invPoRef'); const projContainer = document.getElementById('invProjSelectContainer'); const projSelect = document.getElementById('invProjectSelect');
 
     if (isARA) {
-      // 1. Autofill data Bill To
-      document.getElementById('inv_c_contact').value = "Ibu Vivie"; 
-      document.getElementById('inv_c_phone').value = "0817-650-4844"; 
-      document.getElementById('inv_c_addr').value = "Rukan Artha Gading Blok G-17 Kelapa Gading Jakarta Utara";
+      document.getElementById('inv_c_contact').value = "Ibu Vivie"; document.getElementById('inv_c_phone').value = "0817-650-4844"; document.getElementById('inv_c_addr').value = "Rukan Artha Gading Blok G-17 Kelapa Gading Jakarta Utara";
       ['inv_c_contact', 'inv_c_phone', 'inv_c_addr'].forEach(id => document.getElementById(id).readOnly = true);
-
-      // 2. UPDATE: Aktifkan Dropdown Pilihan Project Khusus ARA
       txtProj.style.display = "none"; txtProj.required = false;
       selProjARA.style.display = "block"; selProjARA.required = true;
-      selProjARA.innerHTML = `
-        <option value="">-- Pilih Project Lokasi ARA --</option>
-        <option value="Bukit Cimanggu City Bogor">Bukit Cimanggu City Bogor</option>
-        <option value="Perum The Botanica Signature Padjajaran">Perum The Botanica Signature Padjajaran</option>
-      `;
-
-      // 3. UPDATE: Berikan Suggestion Format Otomatis pada No. PO REF
+      selProjARA.innerHTML = `<option value="">-- Pilih Project Lokasi ARA --</option><option value="Bukit Cimanggu City Bogor">Bukit Cimanggu City Bogor</option><option value="Perum The Botanica Signature Padjajaran">Perum The Botanica Signature Padjajaran</option>`;
       poRefInput.value = "PO. - /ARA/ - /2026";
-
-      // Tampilkan pilihan data lapangan subcon
       projContainer.style.display = "block"; projSelect.innerHTML = '<option value="">-- Pilih Project Lapangan ARA --</option>';
       customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
     } else {
-      // Kembalikan ke mode reguler ketik bebas
       ['inv_c_contact', 'inv_c_phone', 'inv_c_addr'].forEach(id => { document.getElementById(id).readOnly = false; document.getElementById(id).value = ""; });
-      txtProj.style.display = "block"; txtProj.required = true;
-      selProjARA.style.display = "none"; selProjARA.required = false; selProjARA.innerHTML = "";
-      poRefInput.value = ""; projContainer.style.display = "none";
+      txtProj.style.display = "block"; txtProj.required = true; selProjARA.style.display = "none"; selProjARA.required = false; poRefInput.value = ""; projContainer.style.display = "none";
     }
   }
 
   function autoFillInvShipTo() {
-    const projVal = document.getElementById('invProjectSelect').value;
-    const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
-    if(match) { 
-      document.getElementById('inv_s_name').value = match.contractor; 
-      document.getElementById('inv_s_receiver').value = match.receiver; 
-      document.getElementById('inv_s_phone').value = match.phone; 
-      document.getElementById('inv_s_addr').value = match.address; 
-    }
+    const projVal = document.getElementById('invProjectSelect').value; const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
+    if(match) { document.getElementById('inv_s_name').value = match.contractor; document.getElementById('inv_s_receiver').value = match.receiver; document.getElementById('inv_s_phone').value = match.phone; document.getElementById('inv_s_addr').value = match.address; }
   }
 
-  // UPDATE: Fungsi Tambah Baris Invoice dengan Sistem Switch (Pilih Dropdown / Ketik Tulis Bebas)
   function addInvRow() {
     const tb = document.getElementById('invBody'); if (tb.rows.length >= 10) return;
-    const r = tb.insertRow();
-    
-    // Cell 0: Area Kontrol Input (Kombinasi Dropdown dan Text Input)
-    let cellInput = r.insertCell(0);
-    
-    let inputFree = document.createElement('input');
-    inputFree.type = "text"; inputFree.className = "slds-input"; inputFree.placeholder = "Ketik manual pekerjaan / material...";
-    
-    let selectDropdown = document.createElement('select');
-    selectDropdown.className = "slds-select"; style="display:none;";
-    selectDropdown.innerHTML = '<option value="">-- Pilih Material dari Master --</option>';
-    itemMaster.forEach(i => selectDropdown.add(new Option(i.desc, i.desc)));
-    selectDropdown.style.display = "none"; // Bawaan awal adalah ketik bebas
-    
-    cellInput.appendChild(inputFree);
-    cellInput.appendChild(selectDropdown);
+    const r = tb.insertRow(); let cellInput = r.insertCell(0);
+    let inputFree = document.createElement('input'); inputFree.type = "text"; inputFree.className = "slds-input"; inputFree.placeholder = "Ketik manual pekerjaan...";
+    let selectDropdown = document.createElement('select'); selectDropdown.className = "slds-select"; selectDropdown.innerHTML = '<option value="">-- Pilih Material dari Master --</option>';
+    itemMaster.forEach(i => selectDropdown.add(new Option(i.desc, i.desc))); selectDropdown.style.display = "none";
+    cellInput.appendChild(inputFree); cellInput.appendChild(selectDropdown);
 
-    // Cell 1: Tombol Switch Mode
-    let cellMode = r.insertCell(1);
-    let switchBtn = document.createElement('button');
-    switchBtn.type = "button"; switchBtn.className = "switch-mode-btn"; switchBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas';
-    switchBtn.dataset.mode = "text"; // Simpan status mode aktif
-    
-    // Logika penukaran elemen saat tombol switch diklik
+    let cellMode = r.insertCell(1); let switchBtn = document.createElement('button'); switchBtn.type = "button"; switchBtn.className = "switch-mode-btn"; switchBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas'; switchBtn.dataset.mode = "text";
     switchBtn.onclick = function() {
-      if(this.dataset.mode === "text") {
-        this.dataset.mode = "select"; this.innerHTML = '<i class="fa-solid fa-list"></i> Pilih Master';
-        inputFree.style.display = "none"; inputFree.value = "";
-        selectDropdown.style.display = "block";
-      } else {
-        this.dataset.mode = "text"; this.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas';
-        inputFree.style.display = "block";
-        selectDropdown.style.display = "none"; selectDropdown.value = "";
-      }
+      if(this.dataset.mode === "text") { this.dataset.mode = "select"; this.innerHTML = '<i class="fa-solid fa-list"></i> Pilih Master'; inputFree.style.display = "none"; inputFree.value = ""; selectDropdown.style.display = "block"; } 
+      else { this.dataset.mode = "text"; this.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas'; inputFree.style.display = "block"; selectDropdown.style.display = "none"; selectDropdown.value = ""; }
     };
     cellMode.appendChild(switchBtn);
-
-    // Cell 2 & 3: Qty dan Price
     let cellQty = r.insertCell(2); cellQty.innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
     let cellPrice = r.insertCell(3); cellPrice.innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
-    
-    // Autofill harga jika memilih opsi dropdown master
-    selectDropdown.onchange = function() {
-      const itm = itemMaster.find(x => x.desc === this.value);
-      if(itm) { cellPrice.querySelector('input').value = itm.cost; }
-    };
-
-    // Cell 4: Tombol Hapus Baris
-    let cellDel = r.insertCell(4);
-    cellDel.innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
+    selectDropdown.onchange = function() { const itm = itemMaster.find(x => x.desc === this.value); if(itm) { cellPrice.querySelector('input').value = itm.cost; } };
+    r.insertCell(4).innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
   }
 
   async function handleInvSubmit(e) {
-    e.preventDefault(); const btn = document.getElementById('invSubmitBtn'); const file = document.getElementById('invCustomerFile').files[0];
-    btn.disabled = true; btn.innerHTML = 'Processing...';
-    
-    // Membaca nama project dinamis (apakah dari ketik bebas atau dari select dropdown ARA)
-    const custVal = document.getElementById('invCustomerName').value;
-    const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
-    const finalProjName = isARA ? document.getElementById('invProjectSelectARA').value : document.getElementById('invProjectText').value;
-
+    e.preventDefault(); const btn = document.getElementById('invSubmitBtn'); const file = document.getElementById('invCustomerFile').files[0]; btn.disabled = true; btn.innerHTML = 'Processing...';
+    const custVal = document.getElementById('invCustomerName').value; const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
     const formData = {
-      invNumber: document.getElementById('invNumber').value, invDate: document.getElementById('invDate').value, 
-      projectName: finalProjName, poRef: document.getElementById('invPoRef').value,
-      customerName: custVal, custContact: document.getElementById('inv_c_contact').value, custPhone: document.getElementById('inv_c_phone').value, custAddress: document.getElementById('inv_c_addr').value, 
-      includePPN: document.getElementById('invPPN').checked ? 0.11 : 0,
-      shipName: document.getElementById('inv_s_name').value, shipReceiver: document.getElementById('inv_s_receiver').value, shipPhone: document.getElementById('inv_s_phone').value, shipAddress: document.getElementById('inv_s_addr').value, 
-      preparedBy: document.getElementById('invPreparedBy').value, items: []
+      invNumber: document.getElementById('invNumber').value, invDate: document.getElementById('invDate').value, projectName: isARA ? document.getElementById('invProjectSelectARA').value : document.getElementById('invProjectText').value, poRef: document.getElementById('invPoRef').value,
+      customerName: custVal, custContact: document.getElementById('inv_c_contact').value, custPhone: document.getElementById('inv_c_phone').value, custAddress: document.getElementById('inv_c_addr').value, includePPN: document.getElementById('invPPN').checked ? 0.11 : 0,
+      shipName: document.getElementById('inv_s_name').value, shipReceiver: document.getElementById('inv_s_receiver').value, shipPhone: document.getElementById('inv_s_phone').value, shipAddress: document.getElementById('inv_s_addr').value, preparedBy: document.getElementById('invPreparedBy').value, items: []
     };
-
-    // Membaca isi deskripsi material berdasarkan mode switch masing-masing baris
     const rows = document.getElementById('invBody').rows;
     for(let r of rows) {
-      const switchBtn = r.cells[1].querySelector('.switch-mode-btn');
-      let finalDesc = "";
-      if(switchBtn.dataset.mode === "text") {
-        finalDesc = r.cells[0].querySelector('input').value;
-      } else {
-        finalDesc = r.cells[0].querySelector('select').value;
-      }
-      
-      if(finalDesc) {
-        formData.items.push({ desc: finalDesc, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value });
-      }
+      const sBtn = r.cells[1].querySelector('.switch-mode-btn'); let finalDesc = (sBtn.dataset.mode === "text") ? r.cells[0].querySelector('input').value : r.cells[0].querySelector('select').value;
+      if(finalDesc) formData.items.push({ desc: finalDesc, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value });
     }
-    
     const run = async () => { try { await callBackend("processINV", formData); alert("Invoice sukses dibuat!"); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; } };
     if (file) { const reader = new FileReader(); reader.onload = function(ev) { formData.customerFile = { data: ev.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
-  // MASTER DATA SUBMISSIONS
+  // REPORT ENGINE TRIGGER
+  async function generateReport(jenis) {
+    const statusPesan = document.getElementById('reportStatus'); statusPesan.innerHTML = "Sedang merangkum pembukuan di Google Sheets... Mohon tunggu."; statusPesan.style.color = "blue";
+    try {
+      let actionName = (jenis === 'keuangan') ? 'buatLaporanKeuangan' : 'buatLaporanAbsensi';
+      const msg = await callBackend(actionName, {}); alert(msg); statusPesan.innerHTML = msg; statusPesan.style.color = "green";
+    } catch(e) { alert("Gagal: " + e.message); statusPesan.innerHTML = "Gagal memproses laporan."; statusPesan.style.color = "red"; }
+  }
+
+  // MASTER SUBMISSIONS
   async function submitVendor() {
     const d = { name: document.getElementById('new_v_name').value, pic: document.getElementById('new_v_pic').value, phone: document.getElementById('new_v_phone').value, address: document.getElementById('new_v_addr').value };
     try { alert(await callBackend("saveNewVendor", d)); location.reload(); } catch(e) { alert(e.message); }
@@ -598,3 +605,5 @@
     const n = document.getElementById('new_k_nama').value; try { alert(await callBackend("saveNewKaryawan", {nama: n})); location.reload(); } catch(e) { alert(e.message); }
   }
 </script>
+</body>
+</html>
