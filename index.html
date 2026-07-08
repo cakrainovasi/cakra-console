@@ -1,4 +1,4 @@
-<!-- Cakra Console V2.5 - Frontend Standalone Blogspot -->
+<!-- Cakra Console V2.5 - Frontend Standalone GitHub Pages -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -59,7 +59,7 @@
   .dash-card:hover .dash-icon { background: var(--ck-blue-brand); color: #fff; transform: rotate(-5deg); }
   .dash-title { font-size: 1.25rem; font-weight: 700; color: var(--sf-text-dark); margin-bottom: 12px; font-family: 'Public Sans', sans-serif; }
   
-  .slds-brand-header { background: #ffffff; padding: 25px 40px; border-radius: 16px; border-left: 8px solid var(--ck-pink-brand); margin-bottom: 35px; box-shadow: var(--sf-shadow-pro); display: flex; align-items: center; gap: 25px; border: 1px solid var(--sf-border); border-left: 8px solid var(--ck-pink-brand); }
+  .slds-brand-header { background: #ffffff; padding: 25px 40px; border-radius: 16px; border-left: 8px solid var(--ck-pink-brand); margin-bottom: 35px; box-shadow: var(--sf-shadow-pro); display: flex; align-items: center; gap: 25px; border: 1px solid var(--sf-border); }
   .icon-container { background: linear-gradient(135deg, var(--ck-pink-brand) 0%, var(--ck-blue-brand) 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; flex-shrink: 0; box-shadow: 0 5px 10px rgba(189, 2, 170, 0.2); }
   .slds-brand-header h1 { margin: 0; font-size: 1.7rem; color: var(--ck-blue-brand); font-weight: 800; font-family: 'Public Sans', sans-serif;}
   
@@ -82,9 +82,12 @@
   .slds-button:disabled { background: #d1d5db; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
   .slds-button--neutral { background: #fff; color: var(--ck-pink-brand); border: 2px solid var(--ck-pink-brand); width: auto; box-shadow: none; margin-top: 10px; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;}
 
-  /* Area Kamera Absen */
   .camera-box { width: 100%; max-width: 320px; height: 240px; background: #1e293b; border-radius: 12px; margin: 15px auto; overflow: hidden; border: 3px solid var(--sf-border); position: relative; }
   video, canvas { width: 100%; height: 100%; object-fit: cover; }
+  
+  /* Style tombol switch mode item list di invoice */
+  .switch-mode-btn { background: #f3f4f6; border: 1px solid #d1d5db; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; transition: 0.2s; }
+  .switch-mode-btn:hover { background: #e5e7eb; color: var(--ck-pink-brand); }
 </style>
 
 <div class="cakra-body">
@@ -107,7 +110,7 @@
     <div id="page-home" class="page-view active">
       <div class="welcome-section">
         <h1>Welcome, PT. Cakra!</h1>
-        <p>System Blogspot Frontend is operational. Choose a task:</p>
+        <p>System Frontend via GitHub Pages is secure. Choose a task:</p>
       </div>
       <div class="dashboard-grid">
         <div class="dash-card" onclick="navigateTo('po')"><div class="dash-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div class="dash-title">Purchase Order (PO)</div></div>
@@ -154,7 +157,7 @@
       </form>
     </div>
 
-    <!-- PAGE ABSEN (KAMERA AKTIF) -->
+    <!-- PAGE ABSEN -->
     <div id="page-absen" class="page-view">
       <div class="slds-brand-header">
         <div class="icon-container" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"><i class="fa-solid fa-camera"></i></div>
@@ -165,12 +168,10 @@
           <label class="slds-form-element__label">Pilih Nama</label>
           <select id="absenNama" class="slds-select"><option value="">-- Memuat Nama... --</option></select>
         </div>
-        
         <div class="camera-box">
           <video id="webcam" autoplay playsinline></video>
           <canvas id="canvas" style="display:none;"></canvas>
         </div>
-        
         <button type="button" class="slds-button" onclick="submitAbsenDenganFoto()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
           <i class="fa-solid fa-camera-retro"></i> Ambil Foto & Kirim Absen
         </button>
@@ -187,12 +188,33 @@
           <div class="slds-grid">
             <div class="slds-form-element"><label class="slds-form-element__label">Invoice Number</label><input type="text" id="invNumber" class="slds-input" required><small id="invSuggestionHelp" style="display:block; margin-top:6px; color: #f000d6; font-size:0.75rem; font-weight:600;"></small></div>
             <div class="slds-form-element"><label class="slds-form-element__label">Invoice Date</label><input type="date" id="invDate" class="slds-input" required></div>
-            <div class="slds-form-element"><label class="slds-form-element__label">Project Name</label><input type="text" id="invProject" class="slds-input" required placeholder="Murni nama project"></div>
-            <div class="slds-form-element"><label class="slds-form-element__label">No. PO Ref (Customer)</label><input type="text" id="invPoRef" class="slds-input" placeholder="Free Text"></div>
+            
+            <!-- UPDATE: Nama Project Bisa Dropdown jika ARA / Ketik Bebas jika Reguler -->
+            <div class="slds-form-element">
+              <label class="slds-form-element__label">Project Name</label>
+              <input type="text" id="invProjectText" class="slds-input" required placeholder="Ketik nama project...">
+              <select id="invProjectSelectARA" class="slds-select" style="display:none;"></select>
+            </div>
+
+            <!-- UPDATE: NO. PO REF bisa otomatis suggestion jika trigger ARA -->
+            <div class="slds-form-element">
+              <label class="slds-form-element__label">No. PO Ref (Customer)</label>
+              <input type="text" id="invPoRef" class="slds-input" placeholder="Ketik / Suggestion ARA otomatis...">
+            </div>
           </div>
           <div class="slds-grid" style="margin-top: 20px; align-items: center;">
-            <div class="slds-form-element" style="flex: 2;"><label class="slds-form-element__label">Nama Customer</label><input type="text" id="invCustomerName" class="slds-input" list="customerList" oninput="checkAraInv()" placeholder="Ketik nama atau pilih..." required></div>
+            <div class="slds-form-element" style="flex: 2;"><label class="slds-form-element__label">Nama Customer (Pilih/Ketik)</label><input type="text" id="invCustomerName" class="slds-input" list="customerList" oninput="checkAraInv()" placeholder="Ketik nama atau pilih..." required></div>
             <div class="slds-form-element" style="flex: 1;"><label class="slds-form-element__label">Upload Berkas PO (Optional)</label><input type="file" id="invCustomerFile" class="slds-input" accept=".pdf,image/*"></div>
+            
+            <!-- UPDATE: Tambahan Pilihan Nama Pembuat (Prepared By Staff) -->
+            <div class="slds-form-element" style="flex: 1;">
+              <label class="slds-form-element__label">Prepared By (Staff)</label>
+              <select id="invPreparedBy" class="slds-select" required>
+                <option value="Shiva">Shiva</option>
+                <option value="Maharani">Maharani</option>
+              </select>
+            </div>
+            
             <div class="slds-form-element" style="display: flex; align-items: center; padding-top: 25px;"><input type="checkbox" id="invPPN" checked style="width: 22px; height: 22px; margin-right: 12px;"><label for="invPPN" style="font-weight: 700;">Kenakan PPN (11%)</label></div>
           </div>
         </div>
@@ -205,7 +227,7 @@
           </div>
           <div class="slds-card" style="flex:1;">
             <div class="slds-card__title"><i class="fa-solid fa-truck-fast"></i> Ship To (Data Lapangan)</div>
-            <div class="slds-form-element" id="invProjSelectContainer" style="display:none;"><label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Pilih Project ARA</label><select id="invProjectSelect" class="slds-select" onchange="autoFillInvShipTo()"></select></div>
+            <div class="slds-form-element" id="invProjSelectContainer" style="display:none;"><label class="slds-form-element__label" style="color:var(--ck-pink-brand);">Pilih Project Lapangan ARA</label><select id="invProjectSelect" class="slds-select" onchange="autoFillInvShipTo()"></select></div>
             <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Nama Perusahaan Lapangan</label><input type="text" id="inv_s_name" class="slds-input" required></div>
             <div class="slds-grid" style="margin-top:10px;">
               <div class="slds-form-element"><label class="slds-form-element__label">Penerima Lapangan</label><input type="text" id="inv_s_receiver" class="slds-input" required></div>
@@ -214,9 +236,22 @@
             <div class="slds-form-element" style="margin-top:10px;"><label class="slds-form-element__label">Alamat Lapangan</label><textarea id="inv_s_addr" class="slds-input" style="height:65px;" required></textarea></div>
           </div>
         </div>
+        
+        <!-- UPDATE: Tabel Item List Menggunakan Fitur Switch Mode (Pilih / Tulis Bebas) -->
         <div class="slds-card">
-          <div class="slds-card__title"><i class="fa-solid fa-list-ol"></i> Item List (Free Text)</div>
-          <table id="invTable"><thead><tr><th>Deskripsi Tagihan / Pekerjaan</th><th style="width:120px;">Qty</th><th style="width:250px;">Unit Price (Rp)</th><th style="width:50px;"></th></tr></thead><tbody id="invBody"></tbody></table>
+          <div class="slds-card__title"><i class="fa-solid fa-list-ol"></i> Item List (Kombinasi Dinamis)</div>
+          <table id="invTable">
+            <thead>
+              <tr>
+                <th>Deskripsi Pekerjaan / Material</th>
+                <th style="width:130px;">Mode Input</th>
+                <th style="width:100px;">Qty</th>
+                <th style="width:220px;">Unit Price (Rp)</th>
+                <th style="width:50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="invBody"></tbody>
+          </table>
           <button type="button" class="slds-button--neutral" onclick="addInvRow()"><i class="fa-solid fa-circle-plus"></i> Tambah Item Tagihan</button>
         </div>
         <div style="text-align:center; padding: 20px 0 60px 0;"><button type="submit" id="invSubmitBtn" class="slds-button" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%); max-width:400px;"><i class="fa-solid fa-file-pdf"></i> BUAT INV & GENERATE PDF</button></div>
@@ -264,129 +299,64 @@
 </div>
 
 <script>
-  // ==========================================
-  // PENTING: TEMPELKAN URL WEB APP EXEC ANDA DI SINI
-  // ==========================================
+  // Silakan ganti dengan URL Web App Exec Anda yang valid
   const API_URL = "https://script.google.com/macros/s/AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM/exec";
 
   let vendorMaster = []; let customerMaster = []; let itemMaster = []; let karyawanMaster = [];
   let videoStream = null;
 
-  // Navigasi halaman & Kontrol Kamera Otomatis
   window.navigateTo = function(pageId) {
     document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    
-    const target = document.getElementById('page-' + pageId);
-    if(target) target.classList.add('active');
-    const btn = document.getElementById('nav-' + pageId);
-    if(btn) btn.classList.add('active');
-
-    // Jika masuk ke halaman absen, aktifkan kamera komputer secara langsung
-    if (pageId === 'absen') {
-      bukaKameraKomputer();
-    } else {
-      matikanKameraKomputer();
-    }
+    const target = document.getElementById('page-' + pageId); if(target) target.classList.add('active');
+    const btn = document.getElementById('nav-' + pageId); if(btn) btn.classList.add('active');
+    if (pageId === 'absen') { bukaKameraKomputer(); } else { matikanKameraKomputer(); }
   }
 
-  // ==========================================
-  // CORE FETCH ENGINE (Menembak Data ke Apps Script)
-  // ==========================================
   async function callBackend(action, dataPayload) {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: action, data: dataPayload })
-    });
-    const json = await response.json();
-    if (json.status === "error") throw new Error(json.message);
-    return json.message;
+    const response = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: action, data: dataPayload }) });
+    const json = await response.json(); if (json.status === "error") throw new Error(json.message); return json.message;
   }
 
   window.onload = function() {
     document.getElementById('poDate').value = new Date().toISOString().split('T')[0];
     document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
     
-    // Tarik data Suggestion & Database via GET
-    fetch(API_URL + "?action=getPONumberSuggestion").then(r => r.text()).then(s => {
-      document.getElementById('poNumber').value = s;
-      document.getElementById('poSuggestionHelp').innerHTML = 'Saran No. PO Aktif';
-    });
-    fetch(API_URL + "?action=getINVNumberSuggestion").then(r => r.text()).then(s => {
-      document.getElementById('invNumber').value = s;
-      document.getElementById('invSuggestionHelp').innerHTML = 'Saran No. INV Aktif';
-    });
-
+    fetch(API_URL + "?action=getPONumberSuggestion").then(r => r.text()).then(s => document.getElementById('poNumber').value = s);
+    fetch(API_URL + "?action=getINVNumberSuggestion").then(r => r.text()).then(s => document.getElementById('invNumber').value = s);
     fetch(API_URL + "?action=getVendorMaster").then(r => r.json()).then(d => { vendorMaster = d; populateVendor(); });
     fetch(API_URL + "?action=getCustomerMaster").then(r => r.json()).then(d => { customerMaster = d; populateCustomerOptions(); });
     fetch(API_URL + "?action=getItemMaster").then(r => r.json()).then(d => { itemMaster = d; addItemRow(); addInvRow(); });
-    
     loadKaryawanDropdown();
   };
 
-  // ==========================================
-  // FITUR ABSEN KAMERA REAL TIME
-  // ==========================================
   function loadKaryawanDropdown() {
     fetch(API_URL + "?action=getKaryawanMaster").then(r => r.json()).then(data => {
-      karyawanMaster = data;
-      const sel = document.getElementById('absenNama');
-      sel.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
+      karyawanMaster = data; const sel = document.getElementById('absenNama'); sel.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
       karyawanMaster.forEach(k => { if(k.nama) sel.add(new Option(k.nama, k.nama)); });
     });
   }
 
   async function bukaKameraKomputer() {
     const video = document.getElementById('webcam');
-    try {
-      videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } });
-      video.srcObject = videoStream;
-    } catch (err) {
-      document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera. Harap beri izin browser.";
-      document.getElementById('pesanStatus').style.color = "red";
-    }
+    try { videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } }); video.srcObject = videoStream; } 
+    catch (err) { document.getElementById('pesanStatus').innerHTML = "Gagal memanggil kamera."; }
   }
 
-  function matikanKameraKomputer() {
-    if (videoStream) {
-      videoStream.getTracks().forEach(track => track.stop());
-      videoStream = null;
-    }
-  }
+  function matikanKameraKomputer() { if (videoStream) { videoStream.getTracks().forEach(track => track.stop()); videoStream = null; } }
 
   async function submitAbsenDenganFoto() {
-    const nama = document.getElementById('absenNama').value;
-    if (!nama) return alert("Pilih nama Anda!");
-
-    const pesan = document.getElementById('pesanStatus');
-    pesan.innerHTML = "Sedang mengambil foto & mencatat absen...";
-    pesan.style.color = "blue";
-
-    // Gambar frame video ke Canvas untuk mengambil screenshot wajah
-    const video = document.getElementById('webcam');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = 320;
-    canvas.height = 240;
-    context.drawImage(video, 0, 0, 320, 240);
-    
-    // Ubah gambar menjadi text string base64 png
+    const nama = document.getElementById('absenNama').value; if (!nama) return alert("Pilih nama Anda!");
+    const pesan = document.getElementById('pesanStatus'); pesan.innerHTML = "Sedang memproses...";
+    const video = document.getElementById('webcam'); const canvas = document.getElementById('canvas');
+    canvas.getContext('2d').drawImage(video, 0, 0, 320, 240);
     const rawImageBase64 = canvas.toDataURL('image/png').split(',')[1];
-
-    try {
-      const msg = await callBackend("simpanAbsenFoto", { nama: nama, fotoBase64: rawImageBase64 });
-      alert(msg);
-      pesan.innerHTML = msg; pesan.style.color = "green";
-      document.getElementById('absenNama').value = "";
-      setTimeout(() => { navigateTo('home'); pesan.innerHTML = ""; }, 1500);
-    } catch (e) {
-      alert("Gagal: " + e.message);
-      pesan.innerHTML = "Gagal kirim absen."; pesan.style.color = "red";
-    }
+    try { const msg = await callBackend("simpanAbsenFoto", { nama: nama, fotoBase64: rawImageBase64 }); alert(msg); location.reload(); } 
+    catch (e) { alert("Gagal: " + e.message); }
   }
 
   // ==========================================
-  // FITUR LOGIKA PO & INVOICE (FREE TEXT INCLUDED)
+  // LOGIKA PO 
   // ==========================================
   function populateVendor() {
     const sel = document.getElementById('vendorSelect'); sel.innerHTML = '<option value="">-- Pilih Vendor --</option>';
@@ -403,29 +373,19 @@
 
   function handleCustomerChange() {
     const custVal = document.getElementById('customerSelect').value;
-    const projContainer = document.getElementById('projectSelectContainer');
-    const projSelect = document.getElementById('projectSelect');
-    const customerBaruContainer = document.getElementById('customerBaruInputContainer');
-    const customerBaruInput = document.getElementById('customerBaruNama');
-    
-    document.getElementById('s_project_name').value = ""; document.getElementById('s_receiver').value = "";
-    document.getElementById('s_phone').value = ""; document.getElementById('s_addr').value = "";
+    const projContainer = document.getElementById('projectSelectContainer'); const projSelect = document.getElementById('projectSelect');
+    const customerBaruContainer = document.getElementById('customerBaruInputContainer'); const customerBaruInput = document.getElementById('customerBaruNama');
+    document.getElementById('s_project_name').value = ""; document.getElementById('s_receiver').value = ""; document.getElementById('s_phone').value = ""; document.getElementById('s_addr').value = "";
 
     if (custVal === "Customer Baru") {
-      customerBaruContainer.style.display = "block"; customerBaruInput.required = true;
-      projContainer.style.display = "none"; projSelect.required = false;
-      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
-    } else if (custVal === "PT. Anugerah Rejeki Asia (ARA)") {
-      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; customerBaruInput.value = "";
-      projContainer.style.display = "block"; projSelect.required = true;
+      customerBaruContainer.style.display = "block"; customerBaruInput.required = true; projContainer.style.display = "none"; projSelect.required = false;
+    } else if (custVal === "PT. Anugerah Rejeki Asia (ARA)" || custVal === "PT. ANUGRAH REJEKI ASIA (ARA)") {
+      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; projContainer.style.display = "block"; projSelect.required = true;
       projSelect.innerHTML = '<option value="">-- Pilih Project ARA --</option>';
-      const araProjects = customerMaster.filter(x => x.customer === custVal);
-      araProjects.forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
+      customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
       ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = true);
     } else {
-      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; customerBaruInput.value = "";
-      projContainer.style.display = "none"; projSelect.required = false;
-      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
+      customerBaruContainer.style.display = "none"; customerBaruInput.required = false; projContainer.style.display = "none"; projSelect.required = false;
     }
   }
 
@@ -436,8 +396,7 @@
   }
 
   function autoFillVendor() {
-    const val = document.getElementById('vendorSelect').value;
-    const v = vendorMaster.find(x => (x.name + " | " + x.pic) === val);
+    const val = document.getElementById('vendorSelect').value; const v = vendorMaster.find(x => (x.name + " | " + x.pic) === val);
     if(v) { document.getElementById('v_pic').value = v.pic; document.getElementById('v_phone').value = v.phone; document.getElementById('v_addr').value = v.address; }
   }
 
@@ -456,84 +415,168 @@
   async function handleFormSubmit(e) {
     e.preventDefault(); const btn = document.getElementById('submitBtn'); const file = document.getElementById('customerFile').files[0]; 
     btn.disabled = true; btn.innerHTML = 'Processing...';
-    
     const custVal = document.getElementById('customerSelect').value;
-    const manualCustName = document.getElementById('customerBaruNama').value;
-    let finalCustomerName = (custVal === "Customer Baru") ? manualCustName : custVal;
-
-    let contractorVal = finalCustomerName; 
-    if (custVal === "PT. Anugerah Rejeki Asia (ARA)") {
-      const projVal = document.getElementById('projectSelect').value;
-      const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
-      if(match) contractorVal = match.contractor; 
-    }
-
-    const vendorSelVal = document.getElementById('vendorSelect').value;
-    const vMatch = vendorMaster.find(x => (x.name + " | " + x.pic) === vendorSelVal);
-    const finalVendorName = vMatch ? vMatch.name : vendorSelVal;
-
     const formData = {
       poNumber: document.getElementById('poNumber').value, poDate: document.getElementById('poDate').value,
-      customerName: finalCustomerName, contractorName: contractorVal, projectName: document.getElementById('s_project_name').value,
-      vendorName: finalVendorName, vendorPIC: document.getElementById('v_pic').value,
+      customerName: (custVal === "Customer Baru") ? document.getElementById('customerBaruNama').value : custVal, 
+      contractorName: custVal, projectName: document.getElementById('s_project_name').value,
+      vendorName: document.getElementById('vendorSelect').value.split(" | ")[0], vendorPIC: document.getElementById('v_pic').value,
       vendorAddress: document.getElementById('v_addr').value, vendorPhone: document.getElementById('v_phone').value,
       receiverName: document.getElementById('s_receiver').value, shipAddress: document.getElementById('s_addr').value,
       shipPhone: document.getElementById('s_phone').value, customerPONumber: document.getElementById('customerPONumber').value,
-      includePPN: document.getElementById('includePPN').checked ? 0.11 : 0, preparedBy: document.getElementById('poPreparedBy').value, 
-      items: [], customerFile: null 
+      includePPN: document.getElementById('includePPN').checked ? 0.11 : 0, preparedBy: document.getElementById('poPreparedBy').value, items: []
     };
-
     const rows = document.getElementById('itemBody').rows;
     for(let r of rows) { const dVal = r.cells[0].querySelector('select').value; if(dVal) { formData.items.push({ desc: dVal, size: r.cells[1].querySelector('input').value, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value }); } }
-    
-    const run = async () => {
-      try {
-        const msg = await callBackend("processPO", formData);
-        alert(msg); document.getElementById('poForm').reset(); document.getElementById('itemBody').innerHTML = ''; addItemRow();
-        btn.disabled = false; btn.innerHTML = 'BUAT PO & GENERATE PDF'; navigateTo('home'); window.scrollTo(0,0);
-      } catch(err) { alert(err.message); btn.disabled = false; }
-    };
-
+    const run = async () => { try { alert(await callBackend("processPO", formData)); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; } };
     if (file) { const reader = new FileReader(); reader.onload = function(ex) { formData.customerFile = { data: ex.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
-  // LOGIKA INVOICE
+  // ==========================================
+  // LOGIKA INVOICE (UPDATE PT. ARA TERBARU)
+  // ==========================================
   function checkAraInv() {
     const custVal = document.getElementById('invCustomerName').value;
-    const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("(ARA)");
-    const projContainer = document.getElementById('invProjSelectContainer'); const projSelect = document.getElementById('invProjectSelect');
+    const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
+    
+    const txtProj = document.getElementById('invProjectText');
+    const selProjARA = document.getElementById('invProjectSelectARA');
+    const poRefInput = document.getElementById('invPoRef');
+    const projContainer = document.getElementById('invProjSelectContainer'); 
+    const projSelect = document.getElementById('invProjectSelect');
+
     if (isARA) {
-      document.getElementById('inv_c_contact').value = "Ibu Vivie"; document.getElementById('inv_c_phone').value = "0817-650-4844"; document.getElementById('inv_c_addr').value = "Rukan Artha Gading Blok G-17 Kelapa Gading Jakarta Utara";
+      // 1. Autofill data Bill To
+      document.getElementById('inv_c_contact').value = "Ibu Vivie"; 
+      document.getElementById('inv_c_phone').value = "0817-650-4844"; 
+      document.getElementById('inv_c_addr').value = "Rukan Artha Gading Blok G-17 Kelapa Gading Jakarta Utara";
+      ['inv_c_contact', 'inv_c_phone', 'inv_c_addr'].forEach(id => document.getElementById(id).readOnly = true);
+
+      // 2. UPDATE: Aktifkan Dropdown Pilihan Project Khusus ARA
+      txtProj.style.display = "none"; txtProj.required = false;
+      selProjARA.style.display = "block"; selProjARA.required = true;
+      selProjARA.innerHTML = `
+        <option value="">-- Pilih Project Lokasi ARA --</option>
+        <option value="Bukit Cimanggu City Bogor">Bukit Cimanggu City Bogor</option>
+        <option value="Perum The Botanica Signature Padjajaran">Perum The Botanica Signature Padjajaran</option>
+      `;
+
+      // 3. UPDATE: Berikan Suggestion Format Otomatis pada No. PO REF
+      poRefInput.value = "PO. - /ARA/ - /2026";
+
+      // Tampilkan pilihan data lapangan subcon
       projContainer.style.display = "block"; projSelect.innerHTML = '<option value="">-- Pilih Project Lapangan ARA --</option>';
       customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
-    } else { projContainer.style.display = "none"; }
+    } else {
+      // Kembalikan ke mode reguler ketik bebas
+      ['inv_c_contact', 'inv_c_phone', 'inv_c_addr'].forEach(id => { document.getElementById(id).readOnly = false; document.getElementById(id).value = ""; });
+      txtProj.style.display = "block"; txtProj.required = true;
+      selProjARA.style.display = "none"; selProjARA.required = false; selProjARA.innerHTML = "";
+      poRefInput.value = ""; projContainer.style.display = "none";
+    }
   }
 
   function autoFillInvShipTo() {
     const projVal = document.getElementById('invProjectSelect').value;
     const match = customerMaster.find(x => (x.project + " (" + x.contractor + ")") === projVal);
-    if(match) { document.getElementById('invProject').value = match.project; document.getElementById('inv_s_name').value = match.contractor; document.getElementById('inv_s_receiver').value = match.receiver; document.getElementById('inv_s_phone').value = match.phone; document.getElementById('inv_s_addr').value = match.address; }
+    if(match) { 
+      document.getElementById('inv_s_name').value = match.contractor; 
+      document.getElementById('inv_s_receiver').value = match.receiver; 
+      document.getElementById('inv_s_phone').value = match.phone; 
+      document.getElementById('inv_s_addr').value = match.address; 
+    }
   }
 
+  // UPDATE: Fungsi Tambah Baris Invoice dengan Sistem Switch (Pilih Dropdown / Ketik Tulis Bebas)
   function addInvRow() {
     const tb = document.getElementById('invBody'); if (tb.rows.length >= 10) return;
-    const r = tb.insertRow(); r.innerHTML = `<td><input type="text" class="slds-input"></td><td><input type="number" class="slds-input" value="1"></td><td><input type="number" class="slds-input"></td><td><i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest('tr').remove()"></i></td>`;
+    const r = tb.insertRow();
+    
+    // Cell 0: Area Kontrol Input (Kombinasi Dropdown dan Text Input)
+    let cellInput = r.insertCell(0);
+    
+    let inputFree = document.createElement('input');
+    inputFree.type = "text"; inputFree.className = "slds-input"; inputFree.placeholder = "Ketik manual pekerjaan / material...";
+    
+    let selectDropdown = document.createElement('select');
+    selectDropdown.className = "slds-select"; style="display:none;";
+    selectDropdown.innerHTML = '<option value="">-- Pilih Material dari Master --</option>';
+    itemMaster.forEach(i => selectDropdown.add(new Option(i.desc, i.desc)));
+    selectDropdown.style.display = "none"; // Bawaan awal adalah ketik bebas
+    
+    cellInput.appendChild(inputFree);
+    cellInput.appendChild(selectDropdown);
+
+    // Cell 1: Tombol Switch Mode
+    let cellMode = r.insertCell(1);
+    let switchBtn = document.createElement('button');
+    switchBtn.type = "button"; switchBtn.className = "switch-mode-btn"; switchBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas';
+    switchBtn.dataset.mode = "text"; // Simpan status mode aktif
+    
+    // Logika penukaran elemen saat tombol switch diklik
+    switchBtn.onclick = function() {
+      if(this.dataset.mode === "text") {
+        this.dataset.mode = "select"; this.innerHTML = '<i class="fa-solid fa-list"></i> Pilih Master';
+        inputFree.style.display = "none"; inputFree.value = "";
+        selectDropdown.style.display = "block";
+      } else {
+        this.dataset.mode = "text"; this.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas';
+        inputFree.style.display = "block";
+        selectDropdown.style.display = "none"; selectDropdown.value = "";
+      }
+    };
+    cellMode.appendChild(switchBtn);
+
+    // Cell 2 & 3: Qty dan Price
+    let cellQty = r.insertCell(2); cellQty.innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
+    let cellPrice = r.insertCell(3); cellPrice.innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
+    
+    // Autofill harga jika memilih opsi dropdown master
+    selectDropdown.onchange = function() {
+      const itm = itemMaster.find(x => x.desc === this.value);
+      if(itm) { cellPrice.querySelector('input').value = itm.cost; }
+    };
+
+    // Cell 4: Tombol Hapus Baris
+    let cellDel = r.insertCell(4);
+    cellDel.innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
   }
 
   async function handleInvSubmit(e) {
     e.preventDefault(); const btn = document.getElementById('invSubmitBtn'); const file = document.getElementById('invCustomerFile').files[0];
     btn.disabled = true; btn.innerHTML = 'Processing...';
-    const formData = {
-      invNumber: document.getElementById('invNumber').value, invDate: document.getElementById('invDate').value, projectName: document.getElementById('invProject').value, poRef: document.getElementById('invPoRef').value,
-      customerName: document.getElementById('invCustomerName').value, custContact: document.getElementById('inv_c_contact').value, custPhone: document.getElementById('inv_c_phone').value, custAddress: document.getElementById('inv_c_addr').value, includePPN: document.getElementById('invPPN').checked ? 0.11 : 0,
-      shipName: document.getElementById('inv_s_name').value, shipReceiver: document.getElementById('inv_s_receiver').value, shipPhone: document.getElementById('inv_s_phone').value, shipAddress: document.getElementById('inv_s_addr').value, items: [], customerFile: null
-    };
-    const rows = document.getElementById('invBody').rows;
-    for(let r of rows) { const d = r.cells[0].querySelector('input').value; if(d) formData.items.push({ desc: d, qty: r.cells[1].querySelector('input').value, price: r.cells[2].querySelector('input').value }); }
     
-    const run = async () => {
-      try { await callBackend("processINV", formData); alert("Invoice sukses dibuat!"); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; }
+    // Membaca nama project dinamis (apakah dari ketik bebas atau dari select dropdown ARA)
+    const custVal = document.getElementById('invCustomerName').value;
+    const isARA = custVal.includes("PT. ANUGRAH REJEKI ASIA") || custVal.includes("Anugerah Rejeki Asia") || custVal.includes("(ARA)");
+    const finalProjName = isARA ? document.getElementById('invProjectSelectARA').value : document.getElementById('invProjectText').value;
+
+    const formData = {
+      invNumber: document.getElementById('invNumber').value, invDate: document.getElementById('invDate').value, 
+      projectName: finalProjName, poRef: document.getElementById('invPoRef').value,
+      customerName: custVal, custContact: document.getElementById('inv_c_contact').value, custPhone: document.getElementById('inv_c_phone').value, custAddress: document.getElementById('inv_c_addr').value, 
+      includePPN: document.getElementById('invPPN').checked ? 0.11 : 0,
+      shipName: document.getElementById('inv_s_name').value, shipReceiver: document.getElementById('inv_s_receiver').value, shipPhone: document.getElementById('inv_s_phone').value, shipAddress: document.getElementById('inv_s_addr').value, 
+      preparedBy: document.getElementById('invPreparedBy').value, items: []
     };
+
+    // Membaca isi deskripsi material berdasarkan mode switch masing-masing baris
+    const rows = document.getElementById('invBody').rows;
+    for(let r of rows) {
+      const switchBtn = r.cells[1].querySelector('.switch-mode-btn');
+      let finalDesc = "";
+      if(switchBtn.dataset.mode === "text") {
+        finalDesc = r.cells[0].querySelector('input').value;
+      } else {
+        finalDesc = r.cells[0].querySelector('select').value;
+      }
+      
+      if(finalDesc) {
+        formData.items.push({ desc: finalDesc, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value });
+      }
+    }
+    
+    const run = async () => { try { await callBackend("processINV", formData); alert("Invoice sukses dibuat!"); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; } };
     if (file) { const reader = new FileReader(); reader.onload = function(ev) { formData.customerFile = { data: ev.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
 
@@ -551,8 +594,6 @@
     try { alert(await callBackend("saveNewItem", d)); location.reload(); } catch(e) { alert(e.message); }
   }
   async function submitKaryawan() {
-    const n = document.getElementById('new_k_nama').value;
-    try { alert(await callBackend("saveNewKaryawan", {nama: n})); location.reload(); } catch(e) { alert(e.message); }
+    const n = document.getElementById('new_k_nama').value; try { alert(await callBackend("saveNewKaryawan", {nama: n})); location.reload(); } catch(e) { alert(e.message); }
   }
 </script>
-
