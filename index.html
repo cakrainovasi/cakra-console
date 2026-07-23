@@ -183,7 +183,7 @@
     <div id="page-home" class="page-view active">
       <div class="welcome-section">
         <h1>Welcome, PT. Cakra!</h1>
-        <p>Resseller Kramik Terbaik Se-Indonesia Raya</p>
+        <p>System Frontend Hub is operational & Mobile Responsive. Choose a task:</p>
       </div>
       <div class="dashboard-grid">
         <div class="dash-card" onclick="navigateTo('po')"><div class="dash-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div class="dash-title">Purchase Order (PO)</div></div>
@@ -240,7 +240,7 @@
     <!-- PAGE 3: INV -->
     <div id="page-inv" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%);"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1 style="color: #bd02aa;">Create Invoice</h1><p>Formulir Penagihan & Ekspor PDF Otomatis</p></div></div>
-      <form id="invForm" onsubmit="handleFormSubmit(event)">
+      <form id="invForm" onsubmit="handleInvSubmit(event)">
         <div class="slds-card">
           <div class="slds-card__title"><i class="fa-solid fa-circle-info"></i> Informasi Dasar Invoice</div>
           <div class="slds-grid">
@@ -336,7 +336,7 @@
       <div class="slds-card" style="max-width: 500px; margin: 0 auto; text-align:center;">
         <div class="slds-form-element" style="text-align:left;">
           <label class="slds-form-element__label">Pilih Nama</label>
-          <select id="absenNama" class="slds-select"><option value="">-- Memuat Nama... --</option></select>
+          <select id="absenNama" class="slds-select"><option value="">-- Pilih Nama Anda --</option></select>
         </div>
         <div class="camera-box"><video id="webcam" autoplay playsinline></video><canvas id="canvas" style="display:none;"></canvas></div>
         <button type="button" class="slds-button" onclick="submitAbsenDenganFoto()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fa-solid fa-camera-retro"></i> Ambil Foto & Kirim Absen</button>
@@ -433,8 +433,22 @@
   function populateCustomerOptions() {
     const sel = document.getElementById('customerSelect'); sel.innerHTML = '<option value="">-- Pilih Customer --</option>';
     const list = document.getElementById('customerList'); list.innerHTML = '';
-    const uniqueCustomers = [...new Set(customerMaster.map(c => c.customer))];
-    uniqueCustomers.forEach(cust => { if(cust) { sel.add(new Option(cust, cust)); const opt = document.createElement('option'); opt.value = cust; list.appendChild(opt); } });
+    
+    // BERSIH: Menyaring data mentah agar "Customer Baru" dari database tidak menduplikasi
+    const uniqueCustomers = [...new Set(customerMaster.map(c => c.customer))].filter(cust => {
+      if (!cust) return false;
+      const lowerCust = cust.toLowerCase();
+      return !lowerCust.includes("customer baru") && !lowerCust.includes("reguler");
+    });
+
+    uniqueCustomers.forEach(cust => {
+      sel.add(new Option(cust, cust)); 
+      const opt = document.createElement('option'); 
+      opt.value = cust; 
+      list.appendChild(opt);
+    });
+    
+    // Hanya menyisakan satu penanda input manual buatan sistem yang rapi
     sel.add(new Option("[ CUSTOMER BARU / REGULER ]", "Customer Baru"));
   }
 
@@ -456,7 +470,7 @@
       customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
       ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = true);
       
-      // AUTO SUGGESTION TEXT DI HALAMAN PO JIKA CUSTOMER ADALAH ARA
+      // Auto suggest nomor PO jika customer ARA dipilih
       custPoInput.value = "PO. - /ARA/ - /2026";
     } else {
       customerBaruContainer.style.display = "none"; customerBaruInput.required = false; projContainer.style.display = "none"; projSelect.required = false;
@@ -474,19 +488,16 @@
     if(v) { document.getElementById('v_pic').value = v.pic; document.getElementById('v_phone').value = v.phone; document.getElementById('v_addr').value = v.address; }
   }
 
-  // DINAMIS BARIS ITEM DI PO (BISA KETIK MANUAL MAUPUN PILIH MASTER)
   function addItemRow() {
     const tbody = document.getElementById('itemBody'); if (tbody.rows.length >= 10) return;
     const row = tbody.insertRow();
     
-    // Cell 0: Deskripsi (Dua Mode)
     let cellInput = row.insertCell(0);
     let inputFree = document.createElement('input'); inputFree.type = "text"; inputFree.className = "slds-input"; inputFree.placeholder = "Ketik manual nama material...";
     let selectDropdown = document.createElement('select'); selectDropdown.className = "slds-select"; selectDropdown.innerHTML = '<option value="">-- Pilih Material --</option>';
     itemMaster.forEach(i => selectDropdown.add(new Option(i.desc, i.desc))); selectDropdown.style.display = "none";
     cellInput.appendChild(inputFree); cellInput.appendChild(selectDropdown);
     
-    // Cell 1: Mode Switcher Button
     let cellMode = row.insertCell(1); 
     let switchBtn = document.createElement('button'); switchBtn.type = "button"; switchBtn.className = "switch-mode-btn"; switchBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas'; switchBtn.dataset.mode = "text";
     switchBtn.onclick = function() {
@@ -502,19 +513,15 @@
     };
     cellMode.appendChild(switchBtn);
     
-    // Cell 2: Size / Ukuran
     let cellSize = row.insertCell(2);
     cellSize.innerHTML = '<input type="text" class="slds-input" placeholder="e.g. Pcs">';
     
-    // Cell 3: Qty
     let cellQty = row.insertCell(3);
     cellQty.innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
     
-    // Cell 4: Harga Satuan
     let cellPrice = row.insertCell(4);
     cellPrice.innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
     
-    // Aksi Saat Memilih Dropdown Master
     selectDropdown.onchange = function() { 
       const itm = itemMaster.find(x => x.desc === this.value); 
       if(itm) { 
@@ -523,7 +530,6 @@
       } 
     };
     
-    // Cell 5: Delete Row
     row.insertCell(5).innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
   }
 
