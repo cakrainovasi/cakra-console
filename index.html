@@ -183,7 +183,7 @@
     <div id="page-home" class="page-view active">
       <div class="welcome-section">
         <h1>Welcome, PT. Cakra!</h1>
-        <p>System Frontend Hub is operational & Mobile Responsive. Choose a task:</p>
+        <p>Resseller Kramik Terbaik Se-Indonesia Raya</p>
       </div>
       <div class="dashboard-grid">
         <div class="dash-card" onclick="navigateTo('po')"><div class="dash-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div><div class="dash-title">Purchase Order (PO)</div></div>
@@ -229,7 +229,7 @@
         <div class="slds-card">
           <div class="slds-card__title">Item List (Material)</div>
           <div class="table-container">
-            <table id="itemTable"><thead><tr><th>Deskripsi</th><th style="width:120px;">Size</th><th style="width:100px;">Qty</th><th style="width:200px;">Harga Satuan</th><th style="width:50px;"></th></tr></thead><tbody id="itemBody"></tbody></table>
+            <table id="itemTable"><thead><tr><th>Deskripsi Pekerjaan / Material</th><th style="width:130px;">Mode Input</th><th style="width:120px;">Size</th><th style="width:100px;">Qty</th><th style="width:200px;">Harga Satuan</th><th style="width:50px;"></th></tr></thead><tbody id="itemBody"></tbody></table>
           </div>
           <button type="button" class="slds-button--neutral" onclick="addItemRow()">+ Tambah Item</button>
         </div>
@@ -240,7 +240,7 @@
     <!-- PAGE 3: INV -->
     <div id="page-inv" class="page-view">
       <div class="slds-brand-header"><div class="icon-container" style="background: linear-gradient(135deg, #f000d6 0%, #bd02aa 100%);"><i class="fa-solid fa-file-invoice-dollar"></i></div><div><h1 style="color: #bd02aa;">Create Invoice</h1><p>Formulir Penagihan & Ekspor PDF Otomatis</p></div></div>
-      <form id="invForm" onsubmit="handleInvSubmit(event)">
+      <form id="invForm" onsubmit="handleFormSubmit(event)">
         <div class="slds-card">
           <div class="slds-card__title"><i class="fa-solid fa-circle-info"></i> Informasi Dasar Invoice</div>
           <div class="slds-grid">
@@ -369,7 +369,6 @@
 </div>
 
 <script>
-  // LINK VALID ANDA SUDAH SAYA SUNTIKKAN BERSIH DI SINI
   const API_URL = "https://script.google.com/macros/s/AKfycbx5FkPIS4D-7cynK7rP7OPFkP2C3v17WAp31Ao8on0XH0QE_5uBm1JV6qkdYLZUzfYM/exec";
 
   let vendorMaster = []; let customerMaster = []; let itemMaster = []; let karyawanMaster = [];
@@ -443,17 +442,25 @@
     const custVal = document.getElementById('customerSelect').value;
     const projContainer = document.getElementById('projectSelectContainer'); const projSelect = document.getElementById('projectSelect');
     const customerBaruContainer = document.getElementById('customerBaruInputContainer'); const customerBaruInput = document.getElementById('customerBaruNama');
+    const custPoInput = document.getElementById('customerPONumber');
+    
     document.getElementById('s_project_name').value = ""; document.getElementById('s_receiver').value = ""; document.getElementById('s_phone').value = ""; document.getElementById('s_addr').value = "";
+    custPoInput.value = "";
 
     if (custVal === "Customer Baru") {
       customerBaruContainer.style.display = "block"; customerBaruInput.required = true; projContainer.style.display = "none"; projSelect.required = false;
+      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
     } else if (custVal === "PT. Anugerah Rejeki Asia (ARA)" || custVal === "PT. ANUGRAH REJEKI ASIA (ARA)") {
       customerBaruContainer.style.display = "none"; customerBaruInput.required = false; projContainer.style.display = "block"; projSelect.required = true;
       projSelect.innerHTML = '<option value="">-- Pilih Project ARA --</option>';
       customerMaster.filter(x => x.customer.includes("ARA")).forEach(p => projSelect.add(new Option(p.project + " (" + p.contractor + ")", p.project + " (" + p.contractor + ")")));
       ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = true);
+      
+      // AUTO SUGGESTION TEXT DI HALAMAN PO JIKA CUSTOMER ADALAH ARA
+      custPoInput.value = "PO. - /ARA/ - /2026";
     } else {
       customerBaruContainer.style.display = "none"; customerBaruInput.required = false; projContainer.style.display = "none"; projSelect.required = false;
+      ['s_project_name','s_receiver','s_phone','s_addr'].forEach(id => document.getElementById(id).readOnly = false);
     }
   }
 
@@ -467,16 +474,57 @@
     if(v) { document.getElementById('v_pic').value = v.pic; document.getElementById('v_phone').value = v.phone; document.getElementById('v_addr').value = v.address; }
   }
 
+  // DINAMIS BARIS ITEM DI PO (BISA KETIK MANUAL MAUPUN PILIH MASTER)
   function addItemRow() {
     const tbody = document.getElementById('itemBody'); if (tbody.rows.length >= 10) return;
     const row = tbody.insertRow();
-    let sel = document.createElement('select'); sel.className = 'slds-select'; sel.innerHTML = '<option value="">-- Pilih Item --</option>';
-    itemMaster.forEach(i => sel.add(new Option(i.desc, i.desc))); row.insertCell(0).appendChild(sel);
-    row.insertCell(1).innerHTML = '<input type="text" class="slds-input" readonly placeholder="-">';
-    row.insertCell(2).innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
-    row.insertCell(3).innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
-    sel.onchange = function() { const itm = itemMaster.find(x => x.desc === this.value); if(itm) { row.cells[1].querySelector('input').value = itm.size; row.cells[3].querySelector('input').value = itm.cost; } };
-    row.insertCell(4).innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
+    
+    // Cell 0: Deskripsi (Dua Mode)
+    let cellInput = row.insertCell(0);
+    let inputFree = document.createElement('input'); inputFree.type = "text"; inputFree.className = "slds-input"; inputFree.placeholder = "Ketik manual nama material...";
+    let selectDropdown = document.createElement('select'); selectDropdown.className = "slds-select"; selectDropdown.innerHTML = '<option value="">-- Pilih Material --</option>';
+    itemMaster.forEach(i => selectDropdown.add(new Option(i.desc, i.desc))); selectDropdown.style.display = "none";
+    cellInput.appendChild(inputFree); cellInput.appendChild(selectDropdown);
+    
+    // Cell 1: Mode Switcher Button
+    let cellMode = row.insertCell(1); 
+    let switchBtn = document.createElement('button'); switchBtn.type = "button"; switchBtn.className = "switch-mode-btn"; switchBtn.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas'; switchBtn.dataset.mode = "text";
+    switchBtn.onclick = function() {
+      if(this.dataset.mode === "text") { 
+        this.dataset.mode = "select"; this.innerHTML = '<i class="fa-solid fa-list"></i> Pilih Master'; 
+        inputFree.style.display = "none"; inputFree.value = ""; selectDropdown.style.display = "block"; 
+        row.cells[2].querySelector('input').readOnly = true; 
+      } else { 
+        this.dataset.mode = "text"; this.innerHTML = '<i class="fa-solid fa-pen"></i> Ketik Bebas'; 
+        inputFree.style.display = "block"; selectDropdown.style.display = "none"; selectDropdown.value = ""; 
+        row.cells[2].querySelector('input').readOnly = false; row.cells[2].querySelector('input').value = ""; 
+      }
+    };
+    cellMode.appendChild(switchBtn);
+    
+    // Cell 2: Size / Ukuran
+    let cellSize = row.insertCell(2);
+    cellSize.innerHTML = '<input type="text" class="slds-input" placeholder="e.g. Pcs">';
+    
+    // Cell 3: Qty
+    let cellQty = row.insertCell(3);
+    cellQty.innerHTML = '<input type="number" class="slds-input" value="1" min="1">';
+    
+    // Cell 4: Harga Satuan
+    let cellPrice = row.insertCell(4);
+    cellPrice.innerHTML = '<input type="number" class="slds-input" placeholder="Rp 0">';
+    
+    // Aksi Saat Memilih Dropdown Master
+    selectDropdown.onchange = function() { 
+      const itm = itemMaster.find(x => x.desc === this.value); 
+      if(itm) { 
+        row.cells[2].querySelector('input').value = itm.size; 
+        row.cells[4].querySelector('input').value = itm.cost; 
+      } 
+    };
+    
+    // Cell 5: Delete Row
+    row.insertCell(5).innerHTML = '<i class="fa-solid fa-trash-can" style="color:#e11d48; cursor:pointer;" onclick="this.closest(\'tr\').remove()"></i>';
   }
 
   async function handleFormSubmit(e) {
@@ -493,8 +541,21 @@
       shipPhone: document.getElementById('s_phone').value, customerPONumber: document.getElementById('customerPONumber').value,
       includePPN: document.getElementById('includePPN').checked ? 0.11 : 0, preparedBy: document.getElementById('poPreparedBy').value, items: []
     };
+    
     const rows = document.getElementById('itemBody').rows;
-    for(let r of rows) { const dVal = r.cells[0].querySelector('select').value; if(dVal) { formData.items.push({ desc: dVal, size: r.cells[1].querySelector('input').value, qty: r.cells[2].querySelector('input').value, price: r.cells[3].querySelector('input').value }); } }
+    for(let r of rows) { 
+      const sBtn = r.cells[1].querySelector('.switch-mode-btn'); 
+      let finalDesc = (sBtn.dataset.mode === "text") ? r.cells[0].querySelector('input').value : r.cells[0].querySelector('select').value;
+      if(finalDesc) { 
+        formData.items.push({ 
+          desc: finalDesc, 
+          size: r.cells[2].querySelector('input').value, 
+          qty: r.cells[3].querySelector('input').value, 
+          price: r.cells[4].querySelector('input').value 
+        }); 
+      } 
+    }
+    
     const run = async () => { try { alert(await callBackend("processPO", formData)); location.reload(); } catch(err) { alert(err.message); btn.disabled = false; } };
     if (file) { const reader = new FileReader(); reader.onload = function(ex) { formData.customerFile = { data: ex.target.result.split(',')[1], name: file.name, mimeType: file.type }; run(); }; reader.readAsDataURL(file); } else { run(); }
   }
